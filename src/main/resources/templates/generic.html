@@ -4,7 +4,7 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Фитнесс для всех</title>
 		<meta charset="utf-8" />
@@ -20,6 +20,22 @@
 				<nav>
 					<ul>
 						<li><a th:href="@{site}">Главная</a></li>
+
+						<li sec:authorize="!isAuthenticated()">
+							<a th:href="@{/login}">Войти</a>
+						</li>
+
+						<li sec:authorize="!isAuthenticated()">
+							<a th:href="@{/registration}">Зарегистрироваться</a>
+						</li>
+
+						<li sec:authorize ="isAuthenticated()">
+							<a th:href="@{/logout}">Выйти</a>
+						</li>
+
+						<li sec:authorize ="isAuthenticated()">
+							<span sec:authentication="name"></span>
+						</li>
 					</ul>
 				</nav>
 			</header>

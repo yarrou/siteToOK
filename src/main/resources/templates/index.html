@@ -1,10 +1,12 @@
+
+
 <!DOCTYPE HTML>
 <!--
 	Hyperspace by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Фитнесс для всех с Ольгой Кононович</title>
 		<meta charset="utf-8" />
@@ -19,12 +21,12 @@
 				<div class="inner">
 					<nav>
 						<ul>
-							<li><a href="#intro">Приветствую</a></li>
+							<li><a href="#intro">Приветствие</a></li>
 							<li><a href="#one">О вашем тренере</a></li>
 							<li><a href="#two">Цель занятий</a></li>
-							<li><a href="#three">Питание</a></li>
-							<li><a href="#four">Спортивные добавки</a></li>
-							<li><a href="#five">Типы телосложений</a></li>
+							<li><a href="#three">Типы телосложений</a></li>
+							<li><a href="#four">Питание</a></li>
+							<li><a href="#five">Спортивные добавки</a></li>
 							<li><a href="#six">Тренировки</a></li>
 							<li><a href="#seven">Статьи</a></li>
 							<li><a href="#eight">Связаться со мной</a></li>
@@ -35,13 +37,39 @@
 
 		<!-- Wrapper -->
 			<div id="wrapper">
+				<header id="header">
+					<nav>
+						<ul>
+							<li sec:authorize="hasRole('ADMIN')">
+								<a th:href="@{/admin}">Администрирование</a>
+							</li>
+
+							<li sec:authorize="!isAuthenticated()">
+								<a th:href="@{/login}">Войти</a>
+							</li>
+
+							<li sec:authorize="!isAuthenticated()">
+								<a th:href="@{/registration}">Зарегистрироваться</a>
+							</li>
+
+							<li sec:authorize ="isAuthenticated()">
+								<a th:href="@{/logout}">Выйти</a>
+							</li>
+
+							<li sec:authorize ="isAuthenticated()">
+								<span sec:authentication="name"></span>
+							</li>
+						</ul>
+					</nav>
+				</header>
 
 				<!-- Intro -->
 					<section id="intro" class="wrapper style1 fullscreen fade-up">
+
+
 						<div class="inner">
 							<h1>Фитнесс для всех </h1>
-							<p>Ольга Кононович поделится с вами знаниями как правильно тренироваться и питаться.<br />
-							Все это вы сможете узнать на этом сайте</p>
+							<p>Ольга Кононович поделится с вами секретами , как добиться пластических изменений фигуры, грамотно составить план тренировок и питания</p>
 							<ul class="actions">
 								<li><a href="#one" class="button scrolly">Читать далее</a></li>
 							</ul>
@@ -54,8 +82,8 @@
 							<a href="#" class="image"><img src="images/velcome_olga.jpg" alt="" data-position="center center" /></a>
 							<div class="content">
 								<div class="inner">
-									<h2>Здравствуйте, я Ольга Кононович, тренер и выступающий спортсмен.</h2>
-									<p>Я обучалась в школе фитнесса "Press 224", тренировалась у лучшего тренера Беларуси, и выступала в нескольких чемпионатах.</p>
+									<h2>Я , Ольга Кононович, тренер и выступающий спортсмен.</h2>
+									<p>Обучалась в школе фитнесса "Press 227",  выступала в нескольких чемпионатах РБ и РФ в номинации "Фитнес-бикини".</p>
 									<ul class="actions">
 										<li><a th:href="@{/olga_kononovich_more}" class="button">Читать подробнее</a></li>
 									</ul>
@@ -83,6 +111,22 @@
 				<!-- Three -->
 				<section id="three" class="wrapper style2 spotlights">
 					<section>
+						<a href="#" class="image"><img src="images/tipy_tela.jpg" alt="" data-position="center center" /></a>
+						<div class="content">
+							<div class="inner">
+								<h2>Типы телосложений.</h2>
+								<p>Тип телосложения напрямую влияет на режим и содержание как тренировок так и питания.</p>
+								<ul class="actions">
+									<li><a th:href="@{/olga_kononovich_more}" class="button">Читать подробнее</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+				</section>
+
+				<!-- Four -->
+				<section id="four" class="wrapper style2 spotlights">
+					<section>
 						<a href="#" class="image"><img src="images/pitanie.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
@@ -95,30 +139,16 @@
 						</div>
 					</section>
 				</section>
-				<!-- Four -->
-				<section id="four" class="wrapper style1 spotlights">
+
+
+				<!-- Five -->
+				<section id="five" class="wrapper style1 spotlights">
 					<section>
 						<a href="#" class="image"><img src="images/dobavki.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
 								<h2>Спортивные добавки</h2>
 								<p>Специальные добавки к вашему рациону способны намного увеличить вашу продуктивность.</p>
-								<ul class="actions">
-									<li><a th:href="@{/olga_kononovich_more}" class="button">Читать подробнее</a></li>
-								</ul>
-							</div>
-						</div>
-					</section>
-				</section>
-
-				<!-- Five -->
-				<section id="five" class="wrapper style2 spotlights">
-					<section>
-						<a href="#" class="image"><img src="images/tipy_tela.jpg" alt="" data-position="center center" /></a>
-						<div class="content">
-							<div class="inner">
-								<h2>Типы телосложений.</h2>
-								<p>Тип телосложения напрямую влияет на режим и содержание как тренировок так и питания.</p>
 								<ul class="actions">
 									<li><a th:href="@{/olga_kononovich_more}" class="button">Читать подробнее</a></li>
 								</ul>
