@@ -4,13 +4,19 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Фитнесс для всех</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+   .layerright {
+    float: left; /* Обтекание по правому краю */
+
+   }
+  </style>
 </head>
 <body class="is-preload">
 
@@ -20,6 +26,26 @@
     <nav>
         <ul>
             <li><a th:href="@{site}">Главная</a></li>
+
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/add_article}">Добавить статью</a>
+            </li>
+
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}">Войти</a>
+            </li>
+
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/registration}">Зарегистрироваться</a>
+            </li>
+
+            <li sec:authorize ="isAuthenticated()">
+                <a th:href="@{/logout}">Выйти</a>
+            </li>
+
+            <li sec:authorize ="isAuthenticated()">
+                <span sec:authentication="name"></span>
+            </li>
         </ul>
     </nav>
 </header>
@@ -31,11 +57,13 @@
     <section id="main" class="wrapper">
         <div class="inner">
             <h1 class="major">Статьи о спорте и здоровом образе жизни.</h1>
-            <p>Здесь пока ничего нет.</p>
-            <p>Но очень скоро появится</p>
-            <ul class="actions">
+            <div th:each="article:${articles}">
+                <div th:utext="${article.text}" ></div>
+            </div>
+
+            <!--<ul class="actions">
                 <li><a th:href="@{/new_article}" class="button">Добавить статью</a></li>
-            </ul>
+            </ul> -->
         </div>
     </section>
 
