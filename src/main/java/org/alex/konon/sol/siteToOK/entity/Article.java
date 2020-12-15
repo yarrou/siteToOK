@@ -10,7 +10,8 @@ public class Article {
     private long id;
     //private Date date;
     private String title;
-    @Lob
+    //@Lob
+    @Column(columnDefinition="TEXT")
     private String text;
 
     public Article(){}

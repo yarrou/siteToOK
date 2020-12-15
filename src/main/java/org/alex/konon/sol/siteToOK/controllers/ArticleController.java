@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,8 +43,9 @@ public class ArticleController {
 
     @GetMapping("article")
     public String articlePage(ModelMap model){
+        //, @RequestParam(value = "", required = false) int nextArticle
         ArrayList<Article> articles = (ArrayList<Article>) repository.findAll();
-        String ar;
+        //ArrayList<Article> articles = (ArrayList<Article>) repository.lastArticle();
         if(articles.isEmpty()){
              Article article = new Article("<h2>место для статьи</h2><p>Статья еще не написана, еще в процессе</p>");
              articles.add(article);
