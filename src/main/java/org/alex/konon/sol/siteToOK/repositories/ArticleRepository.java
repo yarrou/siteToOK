@@ -12,7 +12,6 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article,Long>{
     Article save(Article article);
 
-    @Query(value = "SELECT * FROM article  LIMIT 2 ",nativeQuery = true)
-    List<Article> lastArticle();
-    //@Param("numberPage") int numberPage
+    @Query(value = "SELECT * FROM article  order by id DESC LIMIT 5 OFFSET (:numberPage -1)*5 ",nativeQuery = true)
+    List<Article> lastArticle(@Param("numberPage") int numberPage);
 }

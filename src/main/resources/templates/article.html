@@ -55,9 +55,21 @@
                 <div th:utext="${article.text}" ></div>
             </div>
 
-            <!--<ul class="actions">
-                <li><a th:href="@{/new_article}" class="button">Добавить статью</a></li>
-            </ul> -->
+            <ul class="actions">
+                <li>
+                </li>
+            </ul>
+            <div th:if="${pagearticles == 1}">
+                <a href="article"
+                   th:href="@{/article(page=${pagearticles +1} ) }" class="button">Следующие
+                </a>
+            </div>
+            <div th:unless="${pagearticles == 1}">
+                    <a th:href="@{/article(page=${pagearticles - 1} ) }" class="button">Предыдущие</a>
+
+                    <a th:href="@{/article(page=${pagearticles + 1} ) }" class="button">Следующие</a>
+
+            </div>
         </div>
     </section>
 

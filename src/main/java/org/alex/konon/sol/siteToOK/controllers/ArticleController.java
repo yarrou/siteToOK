@@ -42,15 +42,23 @@ public class ArticleController {
     }
 
     @GetMapping("article")
-    public String articlePage(ModelMap model){
-        //, @RequestParam(value = "", required = false) int nextArticle
-        ArrayList<Article> articles = (ArrayList<Article>) repository.findAll();
-        //ArrayList<Article> articles = (ArrayList<Article>) repository.lastArticle();
+    public String articlePage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
+
+        //ArrayList<Article> articles = (ArrayList<Article>) repository.findAll();
+        ArrayList<Article> articles=null;
+        /*if(nextArticle == null){
+            articles = (ArrayList<Article>) repository.lastArticle(1);
+        }
+        else{ */
+            articles = (ArrayList<Article>) repository.lastArticle(page);
+        //}
+
         if(articles.isEmpty()){
              Article article = new Article("<h2>место для статьи</h2><p>Статья еще не написана, еще в процессе</p>");
              articles.add(article);
         }
         model.addAttribute("articles",articles);
+        model.addAttribute("pagearticles",page);
         return "article";
     }
 
