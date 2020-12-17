@@ -36,7 +36,6 @@ public class ArticleController {
 
     @PostMapping("add_article")
     public String addNewArticle(ModelMap model, @ModelAttribute("articleForm") ArticleForm articleForm) {
-        //article.setId(null);
         repository.save(new Article(articleForm.getText(),articleForm.getTitle()));
         return "redirect:/article";
     }
@@ -44,22 +43,25 @@ public class ArticleController {
     @GetMapping("article")
     public String articlePage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
 
-        //ArrayList<Article> articles = (ArrayList<Article>) repository.findAll();
         ArrayList<Article> articles=null;
-        /*if(nextArticle == null){
-            articles = (ArrayList<Article>) repository.lastArticle(1);
-        }
-        else{ */
+        int countArticles = repository.sizeTable();//number of records in the "Articles" table
+        int countPagesWithArticles =1;//number of pages with articles
+        if(countArticles > 0){
             articles = (ArrayList<Article>) repository.lastArticle(page);
-        //}
-
-        if(articles.isEmpty()){
-             Article article = new Article("<h2>место для статьи</h2><p>Статья еще не написана, еще в процессе</p>");
+            if(countArticles%5 > 0){
+                countPagesWithArticles = (countArticles / 5) +1;
+            }
+            else {
+                countPagesWithArticles = countArticles / 5;
+            }
+        }
+        else{
+             Article article = new Article("<h2>Пока статей нет</h2><p>Загляните попозже.</p>");
              articles.add(article);
         }
         model.addAttribute("articles",articles);
         model.addAttribute("pagearticles",page);
+        model.addAttribute("countPages",countPagesWithArticles);
         return "article";
     }
-
 }

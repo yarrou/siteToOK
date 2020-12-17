@@ -65,10 +65,14 @@
                 </a>
             </div>
             <div th:unless="${pagearticles == 1}">
+                <div th:if="${pagearticles == countPages}">
+                    <a th:href="@{/article(page=${pagearticles - 1} ) }" class="button">Предыдущие</a>
+                </div>
+                <div th:unless="${pagearticles == countPages}">
                     <a th:href="@{/article(page=${pagearticles - 1} ) }" class="button">Предыдущие</a>
 
                     <a th:href="@{/article(page=${pagearticles + 1} ) }" class="button">Следующие</a>
-
+                </div>
             </div>
         </div>
     </section>
