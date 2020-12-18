@@ -53,6 +53,12 @@
             <h1 class="major">Статьи о спорте и здоровом образе жизни.</h1>
             <div th:each="article:${articles}">
                 <div th:utext="${article.text}" ></div>
+                <div sec:authorize="hasRole('ADMIN')">
+                    <p th:utext="${article.id}"></p>
+                    <a th:href="@{/redactor_article(idArticle=${article.id})}" class="button">Редактировать</a>
+                    <a th:href="@{/delete_article(idArticle=${article.id})}" class="button">Удалить</a>
+                </div>
+
             </div>
 
             <ul class="actions">

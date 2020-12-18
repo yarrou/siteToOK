@@ -24,8 +24,7 @@ public class ArticleController {
 
     @Autowired
     ArticleRepository repository;
-
-
+    //
     @GetMapping("add_article")
     public String testPage(ModelMap model) {
         ArticleForm articleForm = new ArticleForm();
@@ -33,12 +32,32 @@ public class ArticleController {
         return "add_article";
     }
 
-
     @PostMapping("add_article")
     public String addNewArticle(ModelMap model, @ModelAttribute("articleForm") ArticleForm articleForm) {
         repository.save(new Article(articleForm.getText(),articleForm.getTitle()));
         return "redirect:/article";
     }
+
+
+    @GetMapping("redactor_article")
+    public String redactor(ModelMap model,@RequestParam(value = "idArticle",required = true) long id){
+        Article article = repository.findById(id).get();
+        model.addAttribute("article",article);
+        model.addAttribute("idArt",id);
+        return "redactor_article";
+    }
+    @PostMapping("redactor_article")
+    public String redactorPost(ModelMap model, @ModelAttribute("article") Article article){
+        repository.save(article);
+        return "redirect:/article";
+    }
+
+    @GetMapping("delete_article")
+    public String deleteArticle(ModelMap model , @RequestParam(value = "idArticle",required = true) long id){
+        repository.deleteById(id);
+        return "redirect:/article";
+    }
+
 
     @GetMapping("article")
     public String articlePage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
