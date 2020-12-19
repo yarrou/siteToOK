@@ -27,6 +27,8 @@
     <input id="val" type="hidden" th:field="*{text}"/>
     <input type="hidden" th:field="*{id}">
     <input type="hidden" th:field="*{title}">
+    <p>дата создания <input type="date" name="время создания" value="*{date}" th:field="*{date}"></p>
+
     <input  id="but" type="submit" value="отправить" />
 </form>
 <br/>
@@ -35,7 +37,6 @@
         отмена
     </button>
 </a>
-<p th:utext="${article.getId()}"></p>
 
 
 </body>

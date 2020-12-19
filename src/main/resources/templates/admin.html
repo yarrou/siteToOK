@@ -34,15 +34,13 @@
                 <thead>
                 <th>ID</th>
                 <th>UserName</th>
-                <th>Password</th>
                 <th>Roles</th>
                 </thead>
                 <tr th:each ="user:${allUsers}">
                     <td th:utext="${user.id}">...</td>
                     <td th:utext="${user.username}">...</td>
-                    <td th:utext="${user.password}">...</td>
                     <td th:each="role:${user.roles}">
-                        <span th:utext="${role.name}">...</span>
+                        <div th:utext="${role.name}">...</div><br />
                     </td>
                     <td>
                         <form th:action="@{/admin}" method="post">

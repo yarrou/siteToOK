@@ -9,7 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -31,10 +35,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/registration").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**","/add_article","/redactor_article","/delete_article").hasRole("ADMIN")
-                .antMatchers("/news","/olga_kononovich_more").hasRole("USER")
+                .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article").hasRole("ADMIN")
+                .antMatchers("/news", "/olga_kononovich_more").hasRole("USER")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/","/site","/article").permitAll()
+                .antMatchers("/", "/site", "/article").permitAll()
                 .antMatchers("/**").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
@@ -43,7 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/site")
+                //.defaultSuccessUrl("/site")
+                .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
                 .permitAll()
                 .and()
                 .logout()
