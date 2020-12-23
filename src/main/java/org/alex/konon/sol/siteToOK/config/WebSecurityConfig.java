@@ -27,6 +27,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf()
@@ -36,10 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article").hasRole("ADMIN")
-                .antMatchers("/news", "/olga_kononovich_more").hasRole("USER")
+                .antMatchers("/news", "/olga_kononovich_more","/my_profile","/my_profile_editor").hasAnyRole("USER","ADMIN")
                 //Доступ разрешен всем пользователей
                 .antMatchers("/", "/site", "/article").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/**","/.svg", "/.ico", "/.eot", "/.woff2",
+                        "/.ttf", "/.woff", "/.html", "/.js",
+                        "/.map", "/*.bundle.*").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
@@ -48,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
                 //.defaultSuccessUrl("/site")
-                .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+                //.successHandler(new )
                 .permitAll()
                 .and()
                 .logout()

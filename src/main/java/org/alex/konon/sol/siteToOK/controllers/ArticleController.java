@@ -65,7 +65,7 @@ public class ArticleController {
         ArrayList<Article> articles=null;
         int countArticles = repository.sizeTable();//number of records in the "Articles" table
         int countPagesWithArticles =1;//number of pages with articles
-        if(countArticles > 0){
+        if(countArticles > 0){//if the database contains articles
             articles = (ArrayList<Article>) repository.lastArticle(page);
             if(countArticles%5 > 0){
                 countPagesWithArticles = (countArticles / 5) +1;

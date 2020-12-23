@@ -1,6 +1,7 @@
 package org.alex.konon.sol.siteToOK.config;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 

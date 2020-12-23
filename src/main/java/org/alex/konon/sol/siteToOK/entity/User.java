@@ -1,10 +1,12 @@
 package org.alex.konon.sol.siteToOK.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 
@@ -22,8 +24,45 @@ public class User implements UserDetails {
     private String passwordConfirm;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isvip;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate datecreated;
+
 
     public User() {
+        super();
+        profile=new Profile(this.id);
+        datecreated=LocalDate.now();
+        isvip=false;
+    }
+
+
+
+    public boolean isIsvip() {
+        return isvip;
+    }
+
+    public void setIsvip(boolean isvip) {
+        this.isvip = isvip;
+    }
+
+    public LocalDate getDatecreated() {
+        return datecreated;
+    }
+
+    public void setDatecreated(LocalDate datecreated) {
+        this.datecreated = datecreated;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public Long getId() {

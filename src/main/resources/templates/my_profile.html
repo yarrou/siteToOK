@@ -9,8 +9,8 @@
     <title>Фитнесс для всех</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="assets/css/main.css" type="text/css"/>
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" type="text/javascript"/></noscript>
 </head>
 <body class="is-preload">
 
@@ -20,10 +20,6 @@
     <nav>
         <ul>
             <li><a th:href="@{site}">Главная</a></li>
-
-            <li sec:authorize="hasRole('ADMIN')">
-                <a th:href="@{/add_article}">Добавить статью</a>
-            </li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a th:href="@{/login}">Войти</a>
@@ -50,41 +46,14 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <h1 class="major">Статьи о спорте и здоровом образе жизни.</h1>
-            <div th:each="article:${articles}">
-                <div th:utext="${article.text}" ></div>
-                <div align="right">
-                    <span th:utext="${article.date}"></span>
-
-                </div>
-                <div sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/redactor_article(idArticle=${article.id})}" class="button">Редактировать</a>
-                    <a th:href="@{/delete_article(idArticle=${article.id})}" class="button">Удалить</a>
-                </div>
-
-            </div>
-
-            <ul class="actions">
-                <li>
-                </li>
-            </ul>
-            <div th:if="${pagearticles == 1}">
-                <span class="image right">
-                    <a href="article" th:href="@{/article(page=${pagearticles +1} ) }" class="button">Следующие</a>
-                </span>
-
-            </div>
-            <div th:unless="${pagearticles == 1}">
-                <div th:if="${pagearticles == countPages}">
-                    <a th:href="@{/article(page=${pagearticles - 1} ) }" class="button">Предыдущие</a>
-                </div>
-                <div th:unless="${pagearticles == countPages}">
-                    <a th:href="@{/article(page=${pagearticles - 1} ) }" class="button">Предыдущие</a>
-                    <span class="image right"><a th:href="@{/article(page=${pagearticles + 1} ) }" class="button">Следующие</a></span>
-
-                </div>
-            </div>
+            <h1 class="major">Аккаунт <span th:utext="${user.username}"></span></h1>
+            <p>Имя: <span th:text="${profile.name}"></span></p>
+            <p>Фамилия: <span th:text="${profile.soName}"></span></p>
+            <p>Вес: <span th:text="${profile.weight}"></span></p>
+            <p>Дата рождения: <span th:text="${profile.dateBirthday}"></span></p>
+            <span class="image right"><a th:href="@{/my_profile_editor}" class="button">Редактировать</a></span>
         </div>
+
     </section>
 
 </div>

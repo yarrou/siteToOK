@@ -18,8 +18,7 @@
 <header id="header">
     <a th:href="@{site}" class="title">Фитнесс для всех</a>
     <nav>
-        <ul>
-            <li><a th:href="@{site}">Главная</a></li>
+        <ul><li><a th:href="@{site}">Главная</a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/add_article}">Добавить статью</a>
@@ -50,50 +49,12 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <table>
-                <thead>
-                <th>ID</th>
-                <th>UserName</th>
-                <th>Дата регистрации</th>
-                <th>Roles</th>
-                </thead>
-                <tr th:each ="user:${users}">
-                    <td th:utext="${user.id}">...</td>
-                    <td th:utext="${user.username}">...</td>
-                    <td th:utext="${user.datecreated}"></td>
-                    <td th:each="role:${user.roles}">
-                        <p><span th:utext="${role.name}"></span><br/></p>
-                    </td>
-                    <td>
-                        <form th:action="@{/admin}" method="post">
-                            <input type="hidden" th:name="userId" th:value="${user.id}"/>
-                            <input type="hidden" th:name="action" th:value="delete"/>
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                    <td >
-                        <a th:href="@{/view_profile(profileId=${user.id})}" >профиль</a>
-                    </td>
-                </tr>
-
-            </table>
-
-            <div th:if="${pageusers == 1}">
-                <span class="image right">
-                    <a href="article" th:href="@{/admin(page=${pageusers +1} ) }" class="button">Следующие</a>
-                </span>
-
-            </div>
-            <div th:unless="${pageusers == 1}">
-                <div th:if="${pageusers == countPages}">
-                    <a th:href="@{/admin(page=${pageusers - 1} ) }" class="button">Предыдущие</a>
-                </div>
-                <div th:unless="${pageusers == countPages}">
-                    <a th:href="@{/admin(page=${pageusers - 1} ) }" class="button">Предыдущие</a>
-                    <span class="image right"><a th:href="@{/admin(page=${pageusers + 1} ) }" class="button">Следующие</a></span>
-
-                </div>
-            </div>
+            <p align="center">Профиль <span th:text="${user.username}"></span></p>
+            <p>
+                <span th:text="${profile.name}"></span>  <span th:text="${profile.soName}"></span>
+            </p><br>
+            <p>Дата рождения <span th:utext="${profile.dateBirthday}"></span>   </p>
+            <p> вес <span th:utext="${profile.weight}"></span></p>
         </div>
     </section>
 

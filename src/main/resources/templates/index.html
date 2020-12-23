@@ -57,7 +57,8 @@
 							</li>
 
 							<li sec:authorize ="isAuthenticated()">
-								<span sec:authentication="name"></span>
+								<a th:href="@{/my_profile}"><span sec:authentication="name"></span></a>
+
 							</li>
 						</ul>
 					</nav>

@@ -1,7 +1,9 @@
 package org.alex.konon.sol.siteToOK.service;
 
+import org.alex.konon.sol.siteToOK.entity.Profile;
 import org.alex.konon.sol.siteToOK.entity.Role;
 import org.alex.konon.sol.siteToOK.entity.User;
+import org.alex.konon.sol.siteToOK.repositories.ProfileRepository;
 import org.alex.konon.sol.siteToOK.repositories.RoleRepository;
 import org.alex.konon.sol.siteToOK.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class UserService implements UserDetailsService {
     RoleRepository roleRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    ProfileRepository profileRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -52,10 +56,13 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-
+        Profile profile = new Profile();
+        user.setProfile(profile);
+        profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+
         return true;
     }
 
