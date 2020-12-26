@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
     @Column(columnDefinition = "boolean default false")
-    private boolean isvip;
+    private boolean vip;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datecreated;
     @Column(name = "verification_code", length = 64)
@@ -42,7 +42,7 @@ public class User implements UserDetails {
         super();
         profile=new Profile(this.id);
         datecreated=LocalDate.now();
-        isvip=false;
+        vip=false;
     }
 
     public String getEmail() {
@@ -65,12 +65,12 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public boolean isIsvip() {
-        return isvip;
+    public boolean isVip() {
+        return vip;
     }
 
-    public void setIsvip(boolean isvip) {
-        this.isvip = isvip;
+    public void setVip(boolean vip) {
+        this.vip = vip;
     }
 
     public LocalDate getDatecreated() {

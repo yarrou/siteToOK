@@ -1,6 +1,7 @@
 package org.alex.konon.sol.siteToOK.controllers;
 
 import org.alex.konon.sol.siteToOK.entity.User;
+import org.alex.konon.sol.siteToOK.repositories.UserRepository;
 import org.alex.konon.sol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ public class RegistrationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository repository;
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -29,7 +32,7 @@ public class RegistrationController {
 
         return "registration";
     }
-    @PostMapping("/registration")
+    @PostMapping("/registrationNew")
     public String processRegister(ModelMap model,User user, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         userService.register(user, getSiteURL(request));
@@ -42,8 +45,9 @@ public class RegistrationController {
         return "registration_success";
     }
 
-    @PostMapping("/registrationOld")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, ModelMap model) {
+    @PostMapping("/registration")
+    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, ModelMap model,HttpServletRequest request)
+            throws UnsupportedEncodingException, MessagingException{
 
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -52,10 +56,11 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Пароли не совпадают");
             return "registration";
         }
-        if (!userService.saveUser(userForm)){
+        if (repository.existsByUsername(userForm.getUsername())){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
+        userService.register(userForm, getSiteURL(request));
         model.addAttribute("usr_email",userForm.getEmail());
 
         return "redirect:/registration_success";

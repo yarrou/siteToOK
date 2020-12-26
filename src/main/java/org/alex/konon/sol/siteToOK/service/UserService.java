@@ -61,9 +61,9 @@ public class UserService implements UserDetailsService {
         String senderName = "FitnessToAll";
         String subject = "Please verify your registration";
         String content = "Уважаемый(ая) [[name]],<br>"
-                + "Пожалуйста, пройдите по ссылке для подтверждения регистарации<br>"
+                + "Пожалуйста, пройдите по ссылке для подтверждения регистрации<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">ПОДТВЕРДИТЬ РЕГИСТРАЦИЮ</a></h3>"
-                + "Спасибо вам,<br>"
+                + "Спасибо,<br>"
                 + "Fitness To All.";
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -147,4 +147,5 @@ public class UserService implements UserDetailsService {
         return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
                 .setParameter("paramId", idMin).getResultList();
     }
+
 }

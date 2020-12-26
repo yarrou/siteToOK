@@ -5,9 +5,8 @@ import org.alex.konon.sol.siteToOK.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -18,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users  WHERE users.verification_code = :code",nativeQuery = true)
     public User findByVerificationCode(@Param("code") String code);
+
+    boolean existsByUsername(String username);
 }
