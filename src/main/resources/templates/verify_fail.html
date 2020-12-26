@@ -33,17 +33,9 @@
             <div sec:authorize access="isAuthenticated()">
                 <% response.sendRedirect("/"); %>
             </div>
-            <form method="POST" action="/login">
-                <h2>Вход в систему</h2>
-                <div>
-                    <input name="username" type="text" placeholder="Username"
-                           autofocus="true"/>
-                    <input name="password" type="password" placeholder="Password"/>
-                    <button type="submit">Войти</button>
-                    <span class="image right"><a class="button" th:href="@{registration}">Зарегистрироваться</a></span>
-                </div>
-            </form>
-
+            <div class="container text-center">
+                <h3>Извините, но вы не смогли активировать  свой аккаунт. Возможно он уже был активирован или проверочный код некорректен</h3>
+            </div>
         </div>
     </section>
 

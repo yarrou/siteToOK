@@ -30,6 +30,12 @@ public class User implements UserDetails {
     private boolean isvip;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate datecreated;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+    private boolean enabled;
+    @Column(nullable = false, unique = true, length = 45)
+    private String email;
+
 
 
     public User() {
@@ -39,7 +45,25 @@ public class User implements UserDetails {
         isvip=false;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public boolean isIsvip() {
         return isvip;
@@ -95,7 +119,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+
+        return enabled;
     }
 
     public void setUsername(String username) {

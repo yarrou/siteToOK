@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users  order by id  LIMIT 5 OFFSET (:numberPage -1)*5 ",nativeQuery = true)
     ArrayList<User> fiveUsers(@Param("numberPage") long numberPage);
+
+    @Query(value = "SELECT * FROM users  WHERE users.verification_code = :code",nativeQuery = true)
+    public User findByVerificationCode(@Param("code") String code);
 }

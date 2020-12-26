@@ -33,16 +33,21 @@
             <form th:action="@{/registration}"
                   th:object="${userForm}" method="POST">
                 Username
-                <input type="text" th:field="*{username}" />
+                <input type="text" th:field="*{username}" required minlength="3" maxlength="10"/>
                 <span th:utext="${usernameError}"></span>
                 <br/>
+                Email
+                <input type="text" th:field="*{email}" required minlength="6" maxlength="20"/>
+                <br/>
                 Password
-                <input type="password" th:field="*{password}"/>
+                <input type="password" th:field="*{password}" required minlength="5" maxlength="15"/>
                 <br/>
                 Confirm your password
-                <input type="password" th:field="*{passwordConfirm}"/>
+                <input type="password" th:field="*{passwordConfirm}" required minlength="5" maxlength="15"/>
                 <span th:utext="${passwordError}"></span>
                 <br/>
+                <input type="hidden" th:field="*{profile}">
+                <input type="hidden" th:field="*{datecreated}">
                 <input type="submit" value="Create" />
             </form>
         </div>
