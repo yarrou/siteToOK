@@ -40,7 +40,7 @@ public class User implements UserDetails {
 
     public User() {
         super();
-        profile=new Profile(this.id);
+        //profile=new Profile(this.id);
         datecreated=LocalDate.now();
         vip=false;
     }

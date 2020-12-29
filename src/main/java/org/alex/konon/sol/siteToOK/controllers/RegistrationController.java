@@ -32,13 +32,6 @@ public class RegistrationController {
 
         return "registration";
     }
-    @PostMapping("/registrationNew")
-    public String processRegister(ModelMap model,User user, HttpServletRequest request)
-            throws UnsupportedEncodingException, MessagingException {
-        userService.register(user, getSiteURL(request));
-        model.addAttribute("usr_email",user.getEmail());
-        return "redirect:/registration_success";
-    }
 
     @GetMapping("/registration_success")
     public String registrationSuccess(@ModelAttribute("usr_email") String usrEmail){

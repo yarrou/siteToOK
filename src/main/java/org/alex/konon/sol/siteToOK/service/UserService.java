@@ -1,9 +1,11 @@
 package org.alex.konon.sol.siteToOK.service;
 
 import net.bytebuddy.utility.RandomString;
+import org.alex.konon.sol.siteToOK.entity.PasswordResetToken;
 import org.alex.konon.sol.siteToOK.entity.Profile;
 import org.alex.konon.sol.siteToOK.entity.Role;
 import org.alex.konon.sol.siteToOK.entity.User;
+import org.alex.konon.sol.siteToOK.form.ForgotPasswordForm;
 import org.alex.konon.sol.siteToOK.repositories.ProfileRepository;
 import org.alex.konon.sol.siteToOK.repositories.RoleRepository;
 import org.alex.konon.sol.siteToOK.repositories.UserRepository;
@@ -40,6 +42,39 @@ public class UserService implements UserDetailsService {
     private JavaMailSender mailSender;
     @Value("${S_EMAIL}")
     private String defaultEmail;
+    @Value("${ADMIN_NAME}")
+    private String adminName;
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
+
+    public void forgotPasswordEmail(ForgotPasswordForm form, String siteURL, PasswordResetToken token) throws MessagingException, UnsupportedEncodingException{
+        User user = findByEmail(form.getEmail());
+        String toAddress = form.getEmail();
+        String fromAddress = defaultEmail;
+        String senderName = "FitnessToAll";
+        String subject = "Вы запросили сброс пароля";
+        String content = "Уважаемый(ая) [[name]],<br>"
+                + "Пожалуйста, пройдите по ссылке для сброса пароля<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">СБРОСИТЬ ПАРОЛЬ</a></h3>"
+                + "Спасибо,<br>"
+                + "Fitness To All.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getUsername());
+        String forgotPasswordURL = siteURL + "/reset-password?token=" + token.getToken();
+
+        content = content.replace("[[URL]]", forgotPasswordURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
 
 
     public void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
@@ -148,4 +183,37 @@ public class UserService implements UserDetailsService {
                 .setParameter("paramId", idMin).getResultList();
     }
 
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    public void updatePassword(String password, Long userId) {
+        userRepository.updatePassword(password, userId);
+    }
+    public void adminInit(){
+
+        if(!userRepository.existsByUsername(adminName)){
+            Role userRole =new Role();
+            userRole.setId(1L);
+            userRole.setName("ROLE_USER");
+            roleRepository.save(userRole);
+            Role adminRole = new Role();
+            adminRole.setName("ROLE_ADMIN");
+            adminRole.setId(2L);
+            roleRepository.save(adminRole);
+            User user = new User();
+            user.setUsername(adminName);
+            Profile profile = new Profile();
+            user.setProfile(profile);
+            profile.setUser(user);
+            user.setEmail(defaultEmail);
+            user.setEnabled(true);
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role(1L, "ROLE_USER"));
+            roles.add(new Role(2L, "ROLE_ADMIN"));
+            user.setRoles(roles);
+            user.setPassword(bCryptPasswordEncoder.encode(adminPassword));
+            userRepository.save(user);
+        }
+    }
 }

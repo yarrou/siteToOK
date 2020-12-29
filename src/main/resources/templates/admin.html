@@ -91,8 +91,9 @@
                 <div th:unless="${pageusers == countPages}">
                     <a th:href="@{/admin(page=${pageusers - 1} ) }" class="button">Предыдущие</a>
                     <span class="image right"><a th:href="@{/admin(page=${pageusers + 1} ) }" class="button">Следующие</a></span>
-
+                    <br>
                 </div>
+                <br/>
             </div>
         </div>
     </section>
