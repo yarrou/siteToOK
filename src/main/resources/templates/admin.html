@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
 </head>
 <body class="is-preload">
 
@@ -53,26 +54,47 @@
             <table>
                 <thead>
                 <th>ID</th>
-                <th>UserName</th>
-                <th>Дата регистрации</th>
-                <th>Roles</th>
+                <th>Профиль</th>
+                <th>Роли</th>
+                <th>Регистрация</th>
+                <th>Email</th>
+                <th>Действия</th>
                 </thead>
                 <tr th:each ="user:${users}">
-                    <td th:utext="${user.id}">...</td>
-                    <td th:utext="${user.username}">...</td>
-                    <td th:utext="${user.datecreated}"></td>
-                    <td th:each="role:${user.roles}">
-                        <p><span th:utext="${role.name}"></span><br/></p>
-                    </td>
+                    <td th:utext="${user.id}"></td>
                     <td>
-                        <form th:action="@{/admin}" method="post">
-                            <input type="hidden" th:name="userId" th:value="${user.id}"/>
-                            <input type="hidden" th:name="action" th:value="delete"/>
-                            <button type="submit">Delete</button>
-                        </form>
+                    <a th:href="@{/view_profile(profileId=${user.id})}" ><span th:utext="${user.username}"></span></a>
                     </td>
                     <td >
-                        <a th:href="@{/view_profile(profileId=${user.id})}" >профиль</a>
+                        <ul th:each="role:${user.roles}">
+                            <li th:if="${role.name=='ROLE_ADMIN'}">администратор</li>
+                            <li th:if="${role.name=='ROLE_USER'}">пользователь</li>
+                        </ul>
+                    </td>
+                    <td th:utext="${user.datecreated}"></td>
+                    <td th:utext="${user.email}"></td>
+                    <td>
+                        <!--<ul>
+                            <li>-->
+                                <form th:action="@{/admin}" method="post">
+                                    <input type="hidden" th:name="userId" th:value="${user.id}"/>
+                                    <input type="hidden" th:name="action" th:value="delete"/>
+                                    <button type="submit">Delete</button>
+                                </form>
+                        <!--</li>
+                            <li >-->
+                                <div th:unless="${#sets.contains(user.roles,admRole)}">
+
+                                    <form th:action="@{/admin}" method="post">
+                                        <input type="hidden" th:name="userId" th:value="${user.id}"/>
+                                        <input type="hidden" th:name="action" th:value="addAdminRole"/>
+                                        <button type="submit">Дать админа</button>
+                                    </form>
+                                </div>
+
+
+                        <!-- </li>
+                        </ul> -->
                     </td>
                 </tr>
 
@@ -91,7 +113,7 @@
                 <div th:unless="${pageusers == countPages}">
                     <a th:href="@{/admin(page=${pageusers - 1} ) }" class="button">Предыдущие</a>
                     <span class="image right"><a th:href="@{/admin(page=${pageusers + 1} ) }" class="button">Следующие</a></span>
-                    <br>
+                    <p> </p>
                 </div>
                 <br/>
             </div>

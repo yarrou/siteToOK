@@ -84,9 +84,7 @@ public class UserService implements UserDetailsService {
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(false);
-
-        userRepository.save(user);
-
+        saveUser(user);
         sendVerificationEmail(user, siteURL);
     }
 
@@ -164,7 +162,7 @@ public class UserService implements UserDetailsService {
         user.setProfile(profile);
         profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
         return true;
@@ -190,8 +188,8 @@ public class UserService implements UserDetailsService {
     public void updatePassword(String password, Long userId) {
         userRepository.updatePassword(password, userId);
     }
-    public void adminInit(){
 
+    public void adminInit(){
         if(!userRepository.existsByUsername(adminName)){
             Role userRole =new Role();
             userRole.setId(1L);
@@ -215,5 +213,13 @@ public class UserService implements UserDetailsService {
             user.setPassword(bCryptPasswordEncoder.encode(adminPassword));
             userRepository.save(user);
         }
+    }
+    public void addAdminRole(Long userId){
+        User user = userRepository.getOne(userId);
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        Set<Role> roles = user.getRoles();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.save(user);
     }
 }
