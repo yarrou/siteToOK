@@ -58,20 +58,6 @@ public class PasswordForgotController {
         token.setExpiryDate(30);
         tokenRepository.save(token);
         userService.forgotPasswordEmail(form,getSiteURL(request),token);
-/*
-        Mail mail = new Mail();
-        mail.setFrom("no-reply@memorynotfound.com");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Password reset request");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("user", user);
-        model.put("signature", "https://memorynotfound.com");
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailService.sendEmail(mail);*/
 
         return "resetPasswordSuccess";
 
