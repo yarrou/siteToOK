@@ -17,10 +17,10 @@
 
 <!-- Header -->
 <header id="header">
-    <a th:href="@{site}" class="title">Фитнесс для всех</a>
+    <a th:href="@{/}" class="title">Фитнесс для всех</a>
     <nav>
         <ul>
-            <li><a th:href="@{site}">Главная</a></li>
+            <li><a th:href="@{/}">Главная</a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/add_article}">Добавить статью</a>
@@ -70,9 +70,12 @@
                 </li>
             </ul>
             <div th:if="${pagearticles == 1}">
-                <span class="image right">
-                    <a href="article" th:href="@{/article(page=${pagearticles +1} ) }" class="button">Следующие</a>
-                </span>
+                <block th:unless="${countPages==1}">
+                    <span class="image right">
+                        <a href="article" th:href="@{/article(page=${pagearticles +1} ) }" class="button">Следующие</a>
+                    </span>
+                </block>
+
 
             </div>
             <div th:unless="${pagearticles == 1}">

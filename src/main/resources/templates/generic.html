@@ -17,10 +17,10 @@
 
 		<!-- Header -->
 			<header id="header">
-				<a th:href="@{site}" class="title">Фитнесс для всех</a>
+				<a th:href="@{/}" class="title">Фитнесс для всех</a>
 				<nav>
 					<ul>
-						<li><a th:href="@{site}">Главная</a></li>
+						<li><a th:href="@{/}">Главная</a></li>
 
 						<li sec:authorize="!isAuthenticated()">
 							<a th:href="@{/login}">Войти</a>

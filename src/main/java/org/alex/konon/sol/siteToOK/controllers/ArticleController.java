@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.PostConstruct;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ArticleController {
 
     @Autowired
     ArticleRepository repository;
-    //
+
     @GetMapping("add_article")
     public String testPage(ModelMap model) {
         ArticleForm articleForm = new ArticleForm();
@@ -63,24 +64,38 @@ public class ArticleController {
     public String articlePage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
 
         ArrayList<Article> articles=null;
-        int countArticles = repository.sizeTable();//number of records in the "Articles" table
-        int countPagesWithArticles =1;//number of pages with articles
-        if(countArticles > 0){//if the database contains articles
-            articles = (ArrayList<Article>) repository.lastArticle(page);
-            if(countArticles%5 > 0){
-                countPagesWithArticles = (countArticles / 5) +1;
-            }
-            else {
-                countPagesWithArticles = countArticles / 5;
-            }
+        int countArticles = 0;
+        try {
+            countArticles = repository.sizeTable();//number of records in the "Articles" table
         }
-        else{
-             Article article = new Article("<h2>Пока статей нет</h2><p>Загляните попозже.</p>");
-             articles.add(article);
+        catch (NullPointerException e){
+            Article article = new Article("test","test");
+            repository.save(article);
+            repository.delete(article);
         }
-        model.addAttribute("articles",articles);
-        model.addAttribute("pagearticles",page);
-        model.addAttribute("countPages",countPagesWithArticles);
-        return "article";
+        finally {
+            int countPagesWithArticles =1;//number of pages with articles
+            if(countArticles > 0){//if the database contains articles
+                articles = (ArrayList<Article>) repository.lastArticle(page);
+                if(countArticles%5 > 0){
+                    countPagesWithArticles = (countArticles / 5) +1;
+                }
+                else {
+                    countPagesWithArticles = countArticles / 5;
+                }
+            }
+            else{
+                articles = new ArrayList<>();
+                Article article = new Article("<h2>Пока статей нет</h2><p>Загляните попозже.</p>");
+                articles.add(article);
+            }
+            model.addAttribute("articles",articles);
+            model.addAttribute("pagearticles",page);
+            model.addAttribute("countPages",countPagesWithArticles);
+            return "article";
+        }
+
     }
+
+
 }
