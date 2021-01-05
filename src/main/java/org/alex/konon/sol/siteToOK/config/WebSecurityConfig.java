@@ -43,9 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration","/forgot-password","/registration_success","/reset-password","/resetPasswordSuccess").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article","/elements").hasRole("ADMIN")
-                .antMatchers( "/olga_kononovich_more","/my_profile","/my_profile_editor").hasAnyRole("USER","ADMIN")
+                .antMatchers( "/olga_kononovich_more","/my_profile","/my_profile_editor","/generic").hasAnyRole("USER","ADMIN")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success").permitAll()
+                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more").permitAll()
                 .antMatchers("/**","/.svg", "/.ico", "/.eot", "/.woff2",
                         "/.ttf", "/.woff", "/.html", "/.js",
                         "/.map", "/*.bundle.*").permitAll()
