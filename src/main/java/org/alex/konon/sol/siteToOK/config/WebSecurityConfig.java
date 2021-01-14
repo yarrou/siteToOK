@@ -26,12 +26,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**");
-    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -42,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/registration","/forgot-password","/registration_success","/reset-password","/resetPasswordSuccess").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article","/elements").hasRole("ADMIN")
-                .antMatchers( "/olga_kononovich_more","/my_profile","/my_profile_editor","/generic").hasAnyRole("USER","ADMIN")
+                .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article","/elements","/elements/**").hasRole("ADMIN")
+                .antMatchers( "/olga_kononovich_more","/my_profile","/my_profile_editor","/generic","/messages","/messages/**").hasAnyRole("USER","ADMIN")
                 //Доступ разрешен всем пользователей
                 .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more").permitAll()
                 .antMatchers("/**","/.svg", "/.ico", "/.eot", "/.woff2",
@@ -62,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/site");
+                .logoutSuccessUrl("/");
     }
 
 

@@ -9,9 +9,20 @@
     <title>Фитнесс для всех</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" type="text/css"/>
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" type="text/javascript"/></noscript>
-    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
+    <noscript><link rel="stylesheet" href="/assets/css/noscript.css" type="text/javascript"/></noscript>
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
+    <style>
+   ul.hr {
+    margin: 0;
+    padding: 4px;
+   }
+   ul.hr li {
+    display: inline;
+    margin-right: 5px;
+    padding: 3px;
+   }
+  </style>
 </head>
 <body class="is-preload">
 
@@ -20,11 +31,11 @@
     <a th:href="@{/}" class="title">Фитнесс для всех</a>
     <nav>
         <ul>
-            <li><a th:href="@{/}">Главная</a></li>
-
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/admin}">Администрирование</a>
             </li>
+
+            <li><a th:href="@{/}">Главная</a></li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a th:href="@{/login}">Войти</a>
@@ -55,17 +66,20 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <h1 class="major">Аккаунт <span th:utext="${user.username}"></span></h1>
-            <form th:action="@{/my_profile_editor}"
-                  th:object="${profile}" method="POST">
-
-                <p>Имя: </p><input type="text" value="*{name}" th:field="${profile.name}"/>
-                <p>Фамилия: </p><input type="text" value="*{soName}" th:field="*{soName}"/>
-                <p>Вес: </p><input type="text" value="*{weight}" th:field="*{weight}"/>
-                <p>Дата рождения: </p><input type="date" value="*{dateBirthday}" th:field="*{dateBirthday}"/>
-                <input type="hidden" th:field="*{id}">
-                <input type="hidden" th:field="*{user}">
-                <input   type="submit" value="Сохранить" />
+            <h2 align="center">Обращение <span th:utext="${appeal.id}"></span></h2>
+            <p>
+                Отправитель: <span  th:utext="${appeal.sender}"></span> , <span th:text="${#temporals.format(appeal.date, 'dd-MM-yyyy HH:mm')}"></span>
+            </p>
+            <br>
+            <p th:utext="${appeal.text}"></p>
+            <hr>
+            <form th:action="@{/admin/appeals/{id}(id=${appeal.id})}" method="post">
+                <input type="hidden" th:name="action" th:value="delete"/>
+                <button type="submit">Удалить</button>
+            </form>
+            <form th:action="@{/admin/appeals/{id}(id=${appeal.id})}" method="post">
+                <input type="hidden" th:name="action" th:value="reply"/>
+                <button type="submit">Ответить</button>
             </form>
         </div>
     </section>
@@ -83,13 +97,13 @@
 </footer>
 
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/browser.min.js"></script>
-<script src="assets/js/breakpoints.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
 
 </body>
 </html>

@@ -17,6 +17,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 
 @Controller
 public class RegistrationController {
@@ -47,6 +48,10 @@ public class RegistrationController {
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
             model.addAttribute("passwordError", "Пароли не совпадают");
+            return "registration";
+        }
+        if(userForm.getUsername().toLowerCase(Locale.ROOT).equals("administration")){
+            model.addAttribute("usernameError","Недопустимое имя пользователя");
             return "registration";
         }
         if (repository.existsByUsername(userForm.getUsername())){

@@ -58,6 +58,10 @@
 							</li>
 
 							<li sec:authorize ="isAuthenticated()">
+								<a th:href="@{/messages}">✉</a>
+							</li>
+
+							<li sec:authorize ="isAuthenticated()">
 								<a th:href="@{/my_profile}"><span sec:authentication="name"></span></a>
 
 							</li>
@@ -195,6 +199,17 @@
 						<div class="inner">
 							<h2>Связаться со мной.</h2>
 							<div class="split style1">
+								<section sec:authorize ="isAuthenticated()">
+									<form th:action="@{/}"
+										  th:object="${message}" method="POST">
+
+										<p>Cooбщение: </p>
+										<textarea  rows="5" th:field="*{text}"></textarea>
+										<br>
+										<input   type="submit" value="Отправить" />
+										<br>
+									</form>
+								</section>
 								<!--<section>
 									<form method="post" action="#">
 										<div class="fields">

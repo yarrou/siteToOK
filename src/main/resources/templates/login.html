@@ -38,8 +38,10 @@
                 <h2>Вход в систему</h2>
                 <div>
                     <input name="username" type="text" placeholder="Username"
-                           autofocus="true"/>
-                    <input name="password" type="password" placeholder="Password"/>
+                           autofocus="true" maxlength="25"/>
+                    <br/>
+                    <input name="password" type="password" placeholder="Password" maxlength="25"/>
+                    <br/>
                     <button type="submit">Войти</button>
                     <span class="image right"><a class="button" th:href="@{registration}">Зарегистрироваться</a></span>
                 </div>

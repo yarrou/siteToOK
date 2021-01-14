@@ -162,7 +162,6 @@ public class UserService implements UserDetailsService {
         user.setProfile(profile);
         profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
         return true;
@@ -221,5 +220,11 @@ public class UserService implements UserDetailsService {
         roles.add(role);
         user.setRoles(roles);
         userRepository.save(user);
+    }
+
+    public boolean isAdmin(User user){
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        Set<Role> roles = user.getRoles();
+        return roles.contains(roles);
     }
 }

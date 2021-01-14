@@ -9,9 +9,9 @@
     <title>Фитнесс для всех</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" type="text/css"/>
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" type="text/javascript"/></noscript>
-    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
+    <noscript><link rel="stylesheet" href="/assets/css/noscript.css" type="text/javascript"/></noscript>
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
 </head>
 <body class="is-preload">
 
@@ -55,19 +55,27 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <h1 class="major">Аккаунт <span th:utext="${user.username}"></span></h1>
-            <form th:action="@{/my_profile_editor}"
-                  th:object="${profile}" method="POST">
+            <h2>Сообщение для <span th:utext="${recipient}"></span></h2>
+            <form th:action="@{sendMessage}"
+                  th:object="${message}" method="POST">
 
-                <p>Имя: </p><input type="text" value="*{name}" th:field="${profile.name}"/>
-                <p>Фамилия: </p><input type="text" value="*{soName}" th:field="*{soName}"/>
-                <p>Вес: </p><input type="text" value="*{weight}" th:field="*{weight}"/>
-                <p>Дата рождения: </p><input type="date" value="*{dateBirthday}" th:field="*{dateBirthday}"/>
-                <input type="hidden" th:field="*{id}">
-                <input type="hidden" th:field="*{user}">
-                <input   type="submit" value="Сохранить" />
+                <p>Cooбщение: </p>
+                <textarea  rows="5" th:field="*{text}"></textarea>
+                <br>
+                <input   type="submit" value="Отправить" />
+                <br>
             </form>
+            <ul th:each="message:${lastFiveMessages}"}>
+                <li>
+                    <b th:utext="${message.sender}"></b>
+                    <sup th:text="${#temporals.format(message.date, 'dd-MM-yyyy HH:mm')}"></sup>
+                    <br>
+                    <span th:utext="${message.text}"></span>
+                </li>
+            </ul>
+
         </div>
+
     </section>
 
 </div>
@@ -83,13 +91,13 @@
 </footer>
 
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/browser.min.js"></script>
-<script src="assets/js/breakpoints.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
 
 </body>
 </html>

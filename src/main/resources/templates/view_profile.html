@@ -9,9 +9,9 @@
     <title>Фитнесс для всех</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
 </head>
 <body class="is-preload">
 
@@ -19,10 +19,11 @@
 <header id="header">
     <a th:href="@{/}" class="title">Фитнесс для всех</a>
     <nav>
-        <ul><li><a th:href="@{/}">Главная</a></li>
+        <ul>
+            <li><a th:href="@{/}">Главная</a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
-                <a th:href="@{/add_article}">Добавить статью</a>
+                <a th:href="@{/admin}">Администрирование</a>
             </li>
 
             <li sec:authorize="!isAuthenticated()">
@@ -35,6 +36,10 @@
 
             <li sec:authorize ="isAuthenticated()">
                 <a th:href="@{/logout}">Выйти</a>
+            </li>
+
+            <li sec:authorize ="isAuthenticated()">
+                <a th:href="@{/messages}">✉</a>
             </li>
 
             <li sec:authorize ="isAuthenticated()">
@@ -72,13 +77,13 @@
 </footer>
 
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/browser.min.js"></script>
-<script src="assets/js/breakpoints.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
 
 </body>
 </html>

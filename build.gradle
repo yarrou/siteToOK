@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.alex.konon.sol'
-version = '0.1.4-SNAPSHOT'
+version = '0.2.0-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	implementation 'javax.validation:validation-api'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

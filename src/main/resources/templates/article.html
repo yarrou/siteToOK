@@ -23,6 +23,10 @@
             <li><a th:href="@{/}">Главная</a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin}">Администрирование</a>
+            </li>
+
+            <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/add_article}">Добавить статью</a>
             </li>
 
@@ -36,6 +40,10 @@
 
             <li sec:authorize ="isAuthenticated()">
                 <a th:href="@{/logout}">Выйти</a>
+            </li>
+
+            <li sec:authorize ="isAuthenticated()">
+                <a th:href="@{/messages}">✉</a>
             </li>
 
             <li sec:authorize ="isAuthenticated()">
