@@ -6,14 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
 
 @Configuration
 @EnableWebSecurity
@@ -37,9 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration","/forgot-password","/registration_success","/reset-password","/resetPasswordSuccess").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**", "/add_article", "/redactor_article", "/delete_article","/elements","/elements/**").hasRole("ADMIN")
-                .antMatchers( "/olga_kononovich_more","/my_profile","/my_profile_editor","/generic","/messages","/messages/**").hasAnyRole("USER","ADMIN")
+                //Доступ для авторизованных пользователей
+                .antMatchers( "/my_profile","/my_profile_editor","/messages","/messages/**").fullyAuthenticated()
                 //Доступ разрешен всем пользователей
-                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more").permitAll()
+                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more","/generic","/sports_supplements").permitAll()
                 .antMatchers("/**","/.svg", "/.ico", "/.eot", "/.woff2",
                         "/.ttf", "/.woff", "/.html", "/.js",
                         "/.map", "/*.bundle.*").permitAll()

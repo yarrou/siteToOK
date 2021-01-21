@@ -29,7 +29,7 @@
     <a th:href="@{/}" class="title">Фитнесс для всех</a>
     <nav>
         <ul>
-            li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/}">Главная</a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/admin}">Администрирование</a>
