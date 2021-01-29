@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Доступ для авторизованных пользователей
                 .antMatchers( "/my_profile","/my_profile_editor","/messages","/messages/**").fullyAuthenticated()
                 //Доступ разрешен всем пользователей
-                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more","/generic","/sports_supplements").permitAll()
+                .antMatchers("/", "/tipy_tela", "/article","/verify_fail","/verify_success","/olga_kononovich_more","/generic","/sports_supplements","/nutrition").permitAll()
                 .antMatchers("/**","/.svg", "/.ico", "/.eot", "/.woff2",
                         "/.ttf", "/.woff", "/.html", "/.js",
                         "/.map", "/*.bundle.*").permitAll()
@@ -48,7 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
                 //.defaultSuccessUrl("/site")
-                //.successHandler(new )
                 .permitAll()
                 .and()
                 .logout()

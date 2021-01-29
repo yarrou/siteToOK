@@ -188,6 +188,9 @@ public class UserService implements UserDetailsService {
         userRepository.updatePassword(password, userId);
     }
 
+    /* This method is for automatic database configuration. This includes creating and saving the ADMIN and USER
+    roles, and an account with administrator privileges. Login and password are set using the {ADMIN_NAME} and
+    {ADMIN_PASSWORD} environment variables. */
     public void adminInit(){
         if(!userRepository.existsByUsername(adminName)){
             Role userRole =new Role();
