@@ -26,6 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .requiresChannel()
+                .anyRequest()
+                .requiresSecure()
+                .and()
                 .csrf()
                 .disable()
                 .authorizeRequests()
