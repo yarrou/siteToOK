@@ -56,7 +56,7 @@
     <section id="main" class="wrapper">
         <div class="inner">
             <span th:unless="${nameUser=='administration'}">
-                <h2>Переписка с <span th:utext="${nameUser}"></span></h2>
+                <h2>Переписка с <span th:text="${nameUser}"></span></h2>
             </span>
             <span th:if="${nameUser=='administration'}">
                 <h2>Обращение еще не рассмотренно, пожалуйста ожидайте.</h2>
@@ -69,7 +69,7 @@
                     <b th:utext="${message.sender}"></b>
                     <sup th:text="${#temporals.format(message.date, 'dd-MM-yyyy HH:mm')}"></sup>
                     <br>
-                    <span th:utext="${message.text}"></span>
+                    <span th:text="${message.text}"></span>
                 </li>
 
             </ul>

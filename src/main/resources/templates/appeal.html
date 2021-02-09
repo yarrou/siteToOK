@@ -71,7 +71,7 @@
                 Отправитель: <span  th:utext="${appeal.sender}"></span> , <span th:text="${#temporals.format(appeal.date, 'dd-MM-yyyy HH:mm')}"></span>
             </p>
             <br>
-            <p th:utext="${appeal.text}"></p>
+            <p th:text="${appeal.text}"></p>
             <hr>
             <form th:action="@{/admin/appeals/{id}(id=${appeal.id})}" method="post">
                 <input type="hidden" th:name="action" th:value="delete"/>

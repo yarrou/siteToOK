@@ -46,10 +46,10 @@ public class MessagesController {
 
     @GetMapping("/messages/{name}/sendMessage")
     public String SendMessagePage(@PathVariable("name")String name,ModelMap model,Principal principal){
-        Message[] lastFiveMessages = new Message[5];
+        ArrayList<Message> lastFiveMessages = new ArrayList<>();
         Iterator<Message> iterator = getMessagesList(principal.getName(),name).iterator();
-        for(int i = 0; i < 5 && iterator.hasNext();i++){
-            lastFiveMessages[i] = iterator.next();
+        for(int i = 0;( i < 5 )&& iterator.hasNext();i++){
+            lastFiveMessages.add( iterator.next());
         }
         Message message = new Message();
         model.addAttribute("recipient",name);

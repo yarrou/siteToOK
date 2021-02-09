@@ -65,12 +65,13 @@
                 <input   type="submit" value="Отправить" />
                 <br>
             </form>
-            <ul th:each="message:${lastFiveMessages}"}>
+            <!--<p th:utext="${lastFiveMessages.length}"></p>-->
+            <ul th:each="messageUser:${lastFiveMessages}"}>
                 <li>
-                    <b th:utext="${message.sender}"></b>
-                    <sup th:text="${#temporals.format(message.date, 'dd-MM-yyyy HH:mm')}"></sup>
+                    <b th:utext="${messageUser.sender}"></b>
+                    <sup th:text="${#temporals.format(messageUser.date, 'dd-MM-yyyy HH:mm')}"></sup>
                     <br>
-                    <span th:utext="${message.text}"></span>
+                    <span th:text="${messageUser.text}"></span>
                 </li>
             </ul>
 

@@ -181,10 +181,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User findByEmail(String email){
+
         return userRepository.findByEmail(email);
     }
 
     public void updatePassword(String password, Long userId) {
+
         userRepository.updatePassword(password, userId);
     }
 

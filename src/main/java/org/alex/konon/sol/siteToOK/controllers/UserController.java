@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 import java.security.Principal;
 
 @Controller
-public class UserController {
+public class  UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
