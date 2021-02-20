@@ -1,8 +1,10 @@
 package org.alex.konon.sol.siteToOK.entity;
 
+import org.alex.konon.sol.siteToOK.SiteToOkApplication;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Entity
@@ -19,9 +21,18 @@ public class Profile {
     private String name;
     private String soName;
     private int weight;
+    @Column(name = "content", columnDefinition="bytea")
+    byte[] content;
 
 
     public Profile() {
+        try {
+            content= SiteToOkApplication.class.getClassLoader().getResourceAsStream("static/images/user-male-circle.png").readAllBytes();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("file not found");
+        }
     }
 
     public Profile(Long id){
@@ -73,6 +84,14 @@ public class Profile {
 
     public void setSoName(String soName) {
         this.soName = soName;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }
 

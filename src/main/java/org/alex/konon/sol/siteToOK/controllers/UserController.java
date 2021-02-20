@@ -11,8 +11,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -43,7 +46,14 @@ public class  UserController {
     }
 
     @PostMapping("/my_profile_editor")
-    public String editingMyProfile(ModelMap model,@ModelAttribute("profile") Profile profile){
+    public String editingMyProfile(ModelMap model,@ModelAttribute("profile") Profile profile,@RequestParam("photo") MultipartFile multipartImage){
+        if(!multipartImage.isEmpty()) {
+            try {
+                profile.setContent(multipartImage.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         profileRepository.save(profile);
         return "redirect:/my_profile";
     }
