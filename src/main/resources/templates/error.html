@@ -55,23 +55,11 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <h1 class="major">Аккаунт <span th:utext="${user.username}"></span></h1>
-            <form th:action="@{/my_profile_editor}" enctype="multipart/form-data"
-                  th:object="${profile}" method="POST">
-
-                <p>Имя: <input type="text" value="*{name}" th:field="${profile.name}"/></p>
-                <p>Фамилия: <input type="text" value="*{soName}" th:field="*{soName}"/></p>
-                <p>Вес: <input type="text" value="*{weight}" th:field="*{weight}"/></p>
-                <p>Дата рождения: <input type="date" value="*{dateBirthday}" th:field="*{dateBirthday}"/></p>
-                <br>
-                <input type="file" name="photo"  accept="image/*,image/jpeg">
-                <p>размер не более 2Мb</p>
-                <input type="hidden" th:field="*{id}">
-                <input type="hidden" th:field="*{user}">
-                <input type="hidden" th:field="*{content}">
-                <input  align="right" type="submit" value="Сохранить" />
-            </form>
+            <h1 class="major">Ошибка</span></h1>
+            <p></p><span th:text="${clarification}"></span></p>
+            <p><span th:text="${errorMsg}"></span></p>
         </div>
+
     </section>
 
 </div>

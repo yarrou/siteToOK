@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'org.alex.konon.sol'
-version = '0.3.1-SNAPSHOT'
+version = '0.3.3-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -25,6 +25,7 @@ dependencies {
 	implementation 'javax.validation:validation-api'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -46,16 +47,24 @@ public class  UserController {
     }
 
     @PostMapping("/my_profile_editor")
-    public String editingMyProfile(ModelMap model,@ModelAttribute("profile") Profile profile,@RequestParam("photo") MultipartFile multipartImage){
-        if(!multipartImage.isEmpty()) {
+    public ModelAndView editingMyProfile(ModelMap model, @ModelAttribute("profile") Profile profile, @RequestParam("photo") MultipartFile multipartImage){
+        String returnPage = null;
+        if(multipartImage!=null) {
             try {
                 profile.setContent(multipartImage.getBytes());
+                returnPage = "redirect:/my_profile";
             } catch (IOException e) {
-                e.printStackTrace();
+                model.addAttribute("clarification","не удается считать файл");
+                model.addAttribute("errorMsg", e.getMessage());
+                returnPage = "error";
             }
         }
+        else {
+            returnPage = "error";
+            model.addAttribute("clarification","произошла ошибка загрузки файла");
+        }
         profileRepository.save(profile);
-        return "redirect:/my_profile";
+        return new ModelAndView(returnPage,model);
     }
     @PostConstruct
     public void init() {
