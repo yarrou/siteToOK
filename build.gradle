@@ -6,7 +6,9 @@ plugins {
 }
 
 group = 'org.alex.konon.sol'
+
 version = '0.3.3-SNAPSHOT'
+
 sourceCompatibility = '11'
 
 repositories {
