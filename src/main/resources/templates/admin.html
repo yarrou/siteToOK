@@ -24,6 +24,8 @@
 
             <li><a th:href="@{/admin/appeals}">Обращения</a></li>
 
+            <li><a th:href="@{/admin/reviews}">Отзывы</a></li>
+
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/add_article}">Добавить статью</a>
             </li>
