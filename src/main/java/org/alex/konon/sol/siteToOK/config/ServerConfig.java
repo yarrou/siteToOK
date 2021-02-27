@@ -34,11 +34,12 @@ public class ServerConfig {
     private Connector getHttpConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setScheme("http");
-        connector.setPort(8080);
+        connector.setPort(80);
         connector.setSecure(false);
-        connector.setRedirectPort(8443);
+        connector.setRedirectPort(443);
         return connector;
     }
+
 
     //this component configures the maximum size of the uploaded file.
     @Bean
@@ -49,3 +50,4 @@ public class ServerConfig {
         return multipartResolver;
     }
 }
+
