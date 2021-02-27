@@ -68,7 +68,7 @@ public class ArticleController {
         try {
             countArticles = repository.sizeTable();//number of records in the "Articles" table
         }
-        catch (NullPointerException e){
+        catch (NullPointerException e){//if the table is empty, then you need to initialize it
             Article article = new Article("test","test");
             repository.save(article);
             repository.delete(article);

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -35,14 +36,23 @@ public class User implements UserDetails {
     private boolean enabled;
     @Column(nullable = false, unique = true, length = 45)
     private String email;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Collection<Review> reviews;
 
 
 
     public User() {
         super();
-        //profile=new Profile(this.id);
         datecreated=LocalDate.now();
         vip=false;
+    }
+
+    public Collection<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Collection<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public String getEmail() {

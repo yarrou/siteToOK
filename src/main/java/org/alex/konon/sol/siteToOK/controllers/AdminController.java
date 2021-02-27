@@ -1,13 +1,7 @@
 package org.alex.konon.sol.siteToOK.controllers;
 
-import org.alex.konon.sol.siteToOK.entity.Message;
-import org.alex.konon.sol.siteToOK.entity.Profile;
-import org.alex.konon.sol.siteToOK.entity.Role;
-import org.alex.konon.sol.siteToOK.entity.User;
-import org.alex.konon.sol.siteToOK.repositories.MessageRepository;
-import org.alex.konon.sol.siteToOK.repositories.ProfileRepository;
-import org.alex.konon.sol.siteToOK.repositories.RoleRepository;
-import org.alex.konon.sol.siteToOK.repositories.UserRepository;
+import org.alex.konon.sol.siteToOK.entity.*;
+import org.alex.konon.sol.siteToOK.repositories.*;
 import org.alex.konon.sol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +27,8 @@ public class AdminController {
     RoleRepository roleRepository;
     @Autowired
     MessageRepository messageRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @GetMapping("/admin")
     public String userList(Model model,@RequestParam(value = "page",defaultValue = "1") int page) {
@@ -109,5 +105,34 @@ public class AdminController {
             actionPath = "redirect:/messages/"+message.getSender();
         }
         return actionPath;
+    }
+
+    @GetMapping("/admin/reviews")
+    public String showReviewsPage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
+        int countReviews = reviewRepository.sizeTableForCheck();
+        if(countReviews==0){
+            model.addAttribute("isEmpty",true);
+        }else{
+            model.addAttribute("isEmpty",false);
+            ArrayList<Review> list = reviewRepository.lastReviewsForCheck(page);
+            model.addAttribute("list",list);
+            int countPagesWithReviews=(countReviews%5 > 0)?(countReviews/5)+1:countReviews/5;
+            model.addAttribute("countPages",countPagesWithReviews);
+            model.addAttribute("thisPage",page);
+        }
+        return "reviews_for_check";
+    }
+
+    @PostMapping("/admin/reviews_for_check")
+    public String actionWithReviews(@RequestParam(defaultValue = "",required = true) String action,@RequestParam(defaultValue = "",required = true) long reviewId){
+        Review review = reviewRepository.getOne(reviewId);
+        if(action.equals("delete")){
+            reviewRepository.delete(review);
+        }
+        if(action.equals("approve")){
+            review.setApproved(true);
+            reviewRepository.save(review);
+        }
+        return "redirect:/admin/reviews";
     }
 }
