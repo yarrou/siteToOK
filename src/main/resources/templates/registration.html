@@ -33,17 +33,17 @@
         <div class="inner">
             <form th:action="@{/registration}"
                   th:object="${userForm}" method="POST">
-                Username
+                Имя пользователя
                 <input type="text" th:field="*{username}" required minlength="3" maxlength="15"/>
                 <span th:utext="${usernameError}"></span>
                 <br/>
                 Email
                 <input type="text" th:field="*{email}" required minlength="6" maxlength="35"/>
                 <br/>
-                Password
+                Пароль
                 <input type="password" th:field="*{password}" required minlength="5" maxlength="15"/>
                 <br/>
-                Confirm your password
+                Подтвердите пароль
                 <input type="password" th:field="*{passwordConfirm}" required minlength="5" maxlength="15"/>
                 <span th:utext="${passwordError}"></span>
                 <br/>

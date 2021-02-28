@@ -103,10 +103,9 @@
             </table>
 
             <div th:if="${pageusers == 1}">
-                <span class="image right">
+                <span class="image right" th:unless="${countPages==1}">
                     <a href="article" th:href="@{/admin(page=${pageusers +1} ) }" class="button">Следующие</a>
                 </span>
-
             </div>
             <div th:unless="${pageusers == 1}">
                 <div th:if="${pageusers == countPages}">
@@ -114,11 +113,11 @@
                 </div>
                 <div th:unless="${pageusers == countPages}">
                     <a th:href="@{/admin(page=${pageusers - 1} ) }" class="button">Предыдущие</a>
-                    <span class="image right"><a th:href="@{/admin(page=${pageusers + 1} ) }" class="button">Следующие</a></span>
-                    <p> </p>
+                    <span class="image right"><a th:href="@{/admin(page=${pageusers + 1})}" class="button">Следующие</a></span>
                 </div>
                 <br/>
             </div>
+            <br>
         </div>
     </section>
 
