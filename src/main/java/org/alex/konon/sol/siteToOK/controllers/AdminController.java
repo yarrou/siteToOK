@@ -32,16 +32,11 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String userList(Model model,@RequestParam(value = "page",defaultValue = "1") int page) {
-        long countPagesWithUsers =1;
+
         long countUsersInDB = userRepository.count();
         ArrayList<User> users = userRepository.fiveUsers(page);
         Role admRole = roleRepository.findByName("ROLE_ADMIN");
-        if(countUsersInDB%5 > 0){
-            countPagesWithUsers = (countUsersInDB / 5) +1;
-        }
-        else {
-            countPagesWithUsers = countUsersInDB / 5;
-        }
+        long countPagesWithUsers =(countUsersInDB%5 > 0)?(countUsersInDB / 5)+1:countUsersInDB / 5;
         model.addAttribute("users", users);
         model.addAttribute("pageusers",page);
         model.addAttribute("countPages",countPagesWithUsers);

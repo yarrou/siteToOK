@@ -50,13 +50,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Настройка для входа в систему
                 .formLogin()
                 .loginPage("/login")
+                .loginProcessingUrl("/login_security_check")
+                .failureUrl("/login?error")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 //Перенарпавление на главную страницу после успешного входа
                 //.defaultSuccessUrl("/site")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
     }
 
 
