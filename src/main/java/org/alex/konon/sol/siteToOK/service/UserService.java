@@ -172,7 +172,6 @@ public class UserService implements UserDetailsService {
 
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
-            passwordResetTokenRepository.deleteAll(passwordResetTokenRepository.findByUser_id(userId));
             userRepository.deleteById(userId);
             return true;
         }

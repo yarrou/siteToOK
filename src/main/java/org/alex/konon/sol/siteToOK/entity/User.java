@@ -38,6 +38,8 @@ public class User implements UserDetails {
     private String email;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Review> reviews;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private  Collection<PasswordResetToken> passwordResetTokens;
 
 
 
@@ -45,6 +47,14 @@ public class User implements UserDetails {
         super();
         datecreated=LocalDate.now();
         vip=false;
+    }
+
+    public Collection<PasswordResetToken> getPasswordResetTokens() {
+        return passwordResetTokens;
+    }
+
+    public void setPasswordResetTokens(Collection<PasswordResetToken> passwordResetTokens) {
+        this.passwordResetTokens = passwordResetTokens;
     }
 
     public Collection<Review> getReviews() {
