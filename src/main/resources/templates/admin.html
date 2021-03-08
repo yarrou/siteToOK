@@ -84,14 +84,14 @@
                     <td>
                         <!--<ul>
                             <li>-->
-                                <form th:action="@{/admin}" method="post">
+                                <form th:action="@{/admin}" method="post" onsubmit="return funcDel();">
                                     <input type="hidden" th:name="userId" th:value="${user.id}"/>
                                     <input type="hidden" th:name="action" th:value="delete"/>
                                     <button type="submit">Delete</button>
                                 </form>
                                 <div th:unless="${#sets.contains(user.roles,admRole)}">
 
-                                    <form th:action="@{/admin}" method="post">
+                                    <form th:action="@{/admin}" method="post" onsubmit="return funcConfirmation();">
                                         <input type="hidden" th:name="userId" th:value="${user.id}"/>
                                         <input type="hidden" th:name="action" th:value="addAdminRole"/>
                                         <button type="submit">Дать админа</button>
@@ -136,13 +136,13 @@
 </footer>
 
 <!-- Scripts -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/browser.min.js"></script>
-<script src="assets/js/breakpoints.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
-
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/js/myScripts.js"></script>
 </body>
 </html>

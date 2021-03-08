@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private boolean enabled;
     @Column(nullable = false, unique = true, length = 45)
     private String email;
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Review> reviews;
 
 
