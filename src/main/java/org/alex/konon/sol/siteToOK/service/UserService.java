@@ -6,6 +6,7 @@ import org.alex.konon.sol.siteToOK.entity.Profile;
 import org.alex.konon.sol.siteToOK.entity.Role;
 import org.alex.konon.sol.siteToOK.entity.User;
 import org.alex.konon.sol.siteToOK.form.ForgotPasswordForm;
+import org.alex.konon.sol.siteToOK.repositories.PasswordResetTokenRepository;
 import org.alex.konon.sol.siteToOK.repositories.ProfileRepository;
 import org.alex.konon.sol.siteToOK.repositories.RoleRepository;
 import org.alex.konon.sol.siteToOK.repositories.UserRepository;
@@ -30,6 +31,8 @@ import java.util.*;
 public class UserService implements UserDetailsService {
     @PersistenceContext
     private EntityManager em;
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -169,6 +172,7 @@ public class UserService implements UserDetailsService {
 
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
+            passwordResetTokenRepository.deleteAll(passwordResetTokenRepository.findByUser_id(userId));
             userRepository.deleteById(userId);
             return true;
         }
