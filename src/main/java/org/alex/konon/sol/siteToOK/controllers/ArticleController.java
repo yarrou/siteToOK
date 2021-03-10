@@ -62,39 +62,19 @@ public class ArticleController {
 
     @GetMapping("article")
     public String articlePage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
-
-        ArrayList<Article> articles=null;
-        int countArticles = 0;
-        try {
-            countArticles = repository.sizeTable();//number of records in the "Articles" table
+        int countArticles = repository.sizeTable();
+        if(countArticles==0){
+            model.addAttribute("isEmpty",true);
         }
-        catch (NullPointerException e){//if the table is empty, then you need to initialize it
-            Article article = new Article("test","test");
-            repository.save(article);
-            repository.delete(article);
-        }
-        finally {
-            int countPagesWithArticles =1;//number of pages with articles
-            if(countArticles > 0){//if the database contains articles
-                articles = (ArrayList<Article>) repository.lastArticle(page);
-                if(countArticles%5 > 0){
-                    countPagesWithArticles = (countArticles / 5) +1;
-                }
-                else {
-                    countPagesWithArticles = countArticles / 5;
-                }
-            }
-            else{
-                articles = new ArrayList<>();
-                Article article = new Article("<h2>Пока статей нет</h2><p>Загляните попозже.</p>");
-                articles.add(article);
-            }
+        else {
+            model.addAttribute("isEmpty",false);
+            ArrayList<Article> articles = (ArrayList<Article>) repository.lastArticle(page);
             model.addAttribute("articles",articles);
-            model.addAttribute("pagearticles",page);
+            int countPagesWithArticles=(countArticles%5 > 0)?(countArticles/5)+1:countArticles/5;
             model.addAttribute("countPages",countPagesWithArticles);
-            return "article";
+            model.addAttribute("thisPage",page);
         }
-
+        return "article";
     }
 
 

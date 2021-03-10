@@ -12,3 +12,21 @@ function funcConfirmation(){
     }
     return isConfirmation=="подтверждаю";
 }
+function loginCheck(){
+     if (document.formLogin.username.value == "" && document.formLogin.password.value == "") {
+            alert("Необходимо ввести имя пользователя и пароль");
+            document.formLogin.username.focus();
+            return false;
+     }
+     if (document.formLogin.username.value == "") {
+            alert("необходимо ввести имя пользователя");
+            document.formLogin.username.focus();
+            return false;
+     }
+     if (document.formLogin.password.value == "") {
+        alert("необходимо ввести пароль");
+        document.formLogin.password.focus();
+        return false;
+     }
+     else{return true;}
+}
