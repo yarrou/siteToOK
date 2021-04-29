@@ -1,5 +1,6 @@
 package site.alexkononsol.siteToOK.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
 import site.alexkononsol.siteToOK.entity.PasswordResetToken;
 import site.alexkononsol.siteToOK.entity.Profile;
@@ -27,6 +28,7 @@ import javax.persistence.PersistenceContext;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService {
     @PersistenceContext
@@ -52,6 +54,7 @@ public class UserService implements UserDetailsService {
 
     public void forgotPasswordEmail(ForgotPasswordForm form, String siteURL, PasswordResetToken token) throws MessagingException, UnsupportedEncodingException{
         User user = findByEmail(form.getEmail());
+        log.info("запрос сброса пароля для юзера {}",user.getUsername());
         String toAddress = form.getEmail();
         String fromAddress = defaultEmail;
         String senderName = "FitnessToAll";
@@ -77,10 +80,12 @@ public class UserService implements UserDetailsService {
         helper.setText(content, true);
 
         mailSender.send(message);
+        log.debug("отправлена ссылка для сброса пароля на email {}",user.getEmail());
     }
 
 
     public void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
+        log.debug("регистрация пользователя {}",user.getUsername());
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
@@ -92,6 +97,7 @@ public class UserService implements UserDetailsService {
     }
 
     private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        log.debug("отправка ссылки на подтверждение регистрацию на email {}",user.getEmail());
         String toAddress = user.getEmail();
         String fromAddress = defaultEmail;
         String senderName = "FitnessToAll";
@@ -123,12 +129,13 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByVerificationCode(verificationCode);
 
         if (user == null || user.isEnabled()) {
+            log.warn("registration denied");
             return false;
         } else {
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
-
+            log.debug("user {} registered successfully",user.getUsername());
             return true;
         }
 
@@ -140,9 +147,11 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            UsernameNotFoundException e = new UsernameNotFoundException("User not found");
+            log.error("user {} not found",username,e);
+            throw e;
         }
-
+        log.debug("user {} found ",username);
         return user;
     }
 
@@ -159,6 +168,7 @@ public class UserService implements UserDetailsService {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
+            log.error("user named {} already exists",user.getUsername());
             return false;
         }
         Profile profile = new Profile();
@@ -166,6 +176,7 @@ public class UserService implements UserDetailsService {
         profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         userRepository.save(user);
+        log.info("user {} saved successfully",user.getUsername());
 
         return true;
     }
@@ -173,8 +184,10 @@ public class UserService implements UserDetailsService {
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
+            log.warn("deleted user with id {}",userId);
             return true;
         }
+        log.warn("deleting a user with id {} is impossible, absent in the database",userId);
         return false;
     }
 
@@ -189,7 +202,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void updatePassword(String password, Long userId) {
-
+        log.debug("update password user with id {}",userId);
         userRepository.updatePassword(password, userId);
     }
 
@@ -198,6 +211,7 @@ public class UserService implements UserDetailsService {
     {ADMIN_PASSWORD} environment variables. */
     public void adminInit(){
         if(!userRepository.existsByUsername(adminName)){
+            log.warn("default administrator account not found (username is {} ), database initialization",adminName);
             Role userRole =new Role();
             userRole.setId(1L);
             userRole.setName("ROLE_USER");
@@ -228,6 +242,7 @@ public class UserService implements UserDetailsService {
         roles.add(role);
         user.setRoles(roles);
         userRepository.save(user);
+        log.warn("the user {} is granted admin privileges",user.getUsername());
     }
 
     public boolean isAdmin(User user){

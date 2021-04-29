@@ -1,5 +1,6 @@
 package site.alexkononsol.siteToOK.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import site.alexkononsol.siteToOK.entity.Profile;
 import site.alexkononsol.siteToOK.entity.User;
 import site.alexkononsol.siteToOK.repositories.ProfileRepository;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.security.Principal;
-
+@Slf4j
 @Controller
 public class  UserController {
     @Autowired
@@ -54,12 +55,14 @@ public class  UserController {
                 profile.setContent(multipartImage.getBytes());
                 returnPage = "redirect:/my_profile";
             } catch (IOException e) {
+                log.error("не удается прочесть файл",e);
                 model.addAttribute("clarification","не удается считать файл");
                 model.addAttribute("errorMsg", e.getMessage());
                 returnPage = "error";
             }
         }
         else {
+            log.error("произошла ошибка загрузки файла");
             returnPage = "error";
             model.addAttribute("clarification","произошла ошибка загрузки файла");
         }
