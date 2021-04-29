@@ -1,12 +1,15 @@
 package site.alexkononsol.siteToOK.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import site.alexkononsol.siteToOK.SiteToOkApplication;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.IOException;
 import java.time.LocalDate;
-
+@Slf4j @Getter @Setter
 @Entity
 @Table(name = "profiles")
 public class Profile {
@@ -30,69 +33,16 @@ public class Profile {
             content= SiteToOkApplication.class.getClassLoader().getResourceAsStream("static/images/user-male-circle.png").readAllBytes();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("file not found");
+            log.error("default icon file not found",e);
         }
     }
 
     public Profile(Long id){
         this.id=id;
     }
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public LocalDate getDateBirthday() {
-        return dateBirthday;
-    }
 
-    public void setDateBirthday(LocalDate dateBirthday) {
-        this.dateBirthday = dateBirthday;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSoName() {
-        return soName;
-    }
-
-    public void setSoName(String soName) {
-        this.soName = soName;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
 }
 
 
