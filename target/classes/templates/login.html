@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<!--
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Фитнесс для всех</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+</head>
+<body class="is-preload">
+
+<!-- Header -->
+<header id="header">
+    <a th:href="@{/}" class="title">Фитнесс для всех</a>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <section id="main" class="wrapper">
+        <div class="inner">
+            <div sec:authorize access="isAuthenticated()">
+                <% response.sendRedirect("/"); %>
+            </div>
+            <form method="POST" name="formLogin" action="/login_security_check"
+            onsubmit="return loginCheck();">
+                <h2>Вход в систему</h2>
+                <div>
+                    <input name="username" type="text" placeholder="Username"
+                           autofocus="true" maxlength="25"/>
+                    <br/>
+                    <input name="password" type="password" placeholder="Password" maxlength="25"/>
+                    <div th:if="${param.error}" class="alert alert-error">
+                        Неправильное имя пользователя или пароль.
+                    </div>
+                    <br/>
+                    <button type="submit">Войти</button>
+                    <span class="image right"><a class="button" th:href="@{registration}">Зарегистрироваться</a></span>
+                </div>
+            </form>
+            <a class="button" th:href="@{forgot-password}">Забыли пароль?</a>
+        </div>
+    </section>
+
+
+</div>
+
+<!-- Footer -->
+<footer id="footer" class="wrapper alt">
+    <div class="inner">
+        <ul class="menu">
+            <li>Fitnesstoall.by</li>
+            <li>Ольга Кононович</li>
+            <!-- &copy; Untitled. All rights reserved.Design: "http://html5up.net" HTML5 UP
+             developer Aliaksandr Kananovich alex.konon.sol@gmail.com -->
+        </ul>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="/js/myScripts.js"></script>
+
+</body>
+</html>
