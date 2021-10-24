@@ -1,7 +1,6 @@
 package site.alexkononsol.siteToOK.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,6 +18,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/sports_supplements").setViewName("sports_supplements");
         registry.addViewController("/nutrition").setViewName("nutrition");
         registry.addViewController("/results").setViewName("results");
+        registry.addViewController("/training").setViewName("training");
     }
 
 }
