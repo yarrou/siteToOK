@@ -11,7 +11,7 @@
 
     <groupId>site.alexkononsol</groupId>
     <artifactId>siteToOK</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
     <name>siteToOK</name>
     <description>web site</description>
 
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.7</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
