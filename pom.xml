@@ -11,7 +11,7 @@
 
     <groupId>site.alexkononsol</groupId>
     <artifactId>siteToOK</artifactId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>siteToOK</name>
     <description>web site</description>
 
