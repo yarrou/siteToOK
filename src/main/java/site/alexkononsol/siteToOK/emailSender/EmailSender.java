@@ -1,4 +1,4 @@
-package site.alexkononsol.siteToOK.emilSender;
+package site.alexkononsol.siteToOK.emailSender;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,13 +20,12 @@ public class EmailSender implements Runnable{
     private String emailText;
     private String emailSubject;
 
-    public EmailSender(String toEmail, String emailText, String emailSubject,JavaMailSender mailSender,String serverEmail,String siteName) {
+    public EmailSender(String toEmail, String emailText, String emailSubject,JavaMailSender mailSender,String serverEmail) {
         this.serverEmail = serverEmail;
         this.mailSender = mailSender;
         this.toEmail = toEmail;
         this.emailText = emailText;
         this.emailSubject = emailSubject;
-        this.siteName = siteName;
 
         new Thread(this).start();
     }
