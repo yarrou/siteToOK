@@ -14,24 +14,22 @@ public class EmailSender implements Runnable{
 
     private JavaMailSender mailSender;
     private String serverEmail;
-    private String siteName;
-
     private String toEmail;
     private String emailText;
     private String emailSubject;
 
-    public EmailSender(String toEmail, String emailText, String emailSubject,JavaMailSender mailSender,String serverEmail) {
-        this.serverEmail = serverEmail;
+
+    public EmailSender(String toEmail, String emailText, String emailSubject, JavaMailSender mailSender,String serverEmail) {
         this.mailSender = mailSender;
         this.toEmail = toEmail;
         this.emailText = emailText;
         this.emailSubject = emailSubject;
-
+        this.serverEmail = serverEmail;
         new Thread(this).start();
     }
 
     private void sendEmail() throws MessagingException, UnsupportedEncodingException {
-        String senderName = siteName;
+        String senderName = "FitnessToAll";;
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
