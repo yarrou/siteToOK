@@ -89,6 +89,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
+    @Override
+    public long userCount() {
+        return userRepository.count();
+    }
+
+    @Override
+    public List<User> get5Users(int page) {
+        return userRepository.fiveUsers(page);
+    }
+
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
