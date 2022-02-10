@@ -1,11 +1,6 @@
 package site.alexkononsol.siteToOK.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import site.alexkononsol.siteToOK.entity.Profile;
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.repositories.ProfileRepository;
-import site.alexkononsol.siteToOK.repositories.UserRepository;
-import site.alexkononsol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import site.alexkononsol.siteToOK.entity.Profile;
+import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.repositories.ProfileRepository;
+import site.alexkononsol.siteToOK.repositories.UserRepository;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -27,11 +27,11 @@ public class  UserController {
     @Autowired
     ProfileRepository profileRepository;
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @GetMapping("/my_profile")
     public String myProfile(ModelMap model, Principal principal){
-        User user = userRepository.findByUsername(principal.getName());
+        User user = userService.getUserByName(principal.getName());
         Profile profile = user.getProfile();
         model.addAttribute("user",user);
         model.addAttribute("profile",profile);

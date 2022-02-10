@@ -1,8 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.repositories.UserRepository;
-import site.alexkononsol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.repositories.UserRepository;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.util.Locale;
 public class RegistrationController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
     private UserRepository repository;
 
@@ -58,7 +58,7 @@ public class RegistrationController {
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
-        userService.register(userForm, getSiteURL(request));
+        userServiceImpl.register(userForm);
         model.addAttribute("usr_email",userForm.getEmail());
 
         return "redirect:/registration_success";
@@ -69,7 +69,7 @@ public class RegistrationController {
     }
     @GetMapping("/verify")
     public String verifyUser(@RequestParam (required = true) String code) {
-        if (userService.verify(code)) {
+        if (userServiceImpl.verifyRegistration(code)) {
             return "verify_success";
         } else {
             return "verify_fail";

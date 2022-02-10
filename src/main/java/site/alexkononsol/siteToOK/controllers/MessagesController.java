@@ -1,10 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.Message;
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.repositories.MessageRepository;
-import site.alexkononsol.siteToOK.repositories.UserRepository;
-import site.alexkononsol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,6 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import site.alexkononsol.siteToOK.entity.Message;
+import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.repositories.MessageRepository;
+import site.alexkononsol.siteToOK.repositories.UserRepository;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class MessagesController {
     @Autowired
     MessageRepository messageRepository;
     @Autowired
-    UserService service;
+    UserServiceImpl service;
 
     @GetMapping("/messages")
     public String showMessagesPage(Principal principal, ModelMap model){

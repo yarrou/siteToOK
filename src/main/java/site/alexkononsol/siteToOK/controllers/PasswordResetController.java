@@ -1,10 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.PasswordResetToken;
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.form.PasswordResetForm;
-import site.alexkononsol.siteToOK.repositories.PasswordResetTokenRepository;
-import site.alexkononsol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import site.alexkononsol.siteToOK.entity.PasswordResetToken;
+import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.form.PasswordResetForm;
+import site.alexkononsol.siteToOK.repositories.PasswordResetTokenRepository;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class PasswordResetController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
     private PasswordResetTokenRepository tokenRepository;
     @Autowired
@@ -63,7 +63,7 @@ public class PasswordResetController {
         PasswordResetToken token = tokenRepository.findByToken(form.getToken());
         User user = token.getUser();
         String updatedPassword = passwordEncoder.encode(form.getPassword());
-        userService.updatePassword(updatedPassword, user.getId());
+        userServiceImpl.updatePassword(updatedPassword, user.getId());
         tokenRepository.delete(token);
 
         return "redirect:/login?resetSuccess";

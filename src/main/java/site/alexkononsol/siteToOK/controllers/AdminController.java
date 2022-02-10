@@ -1,7 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.*;
-import site.alexkononsol.siteToOK.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import site.alexkononsol.siteToOK.entity.*;
 import site.alexkononsol.siteToOK.repositories.*;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @Controller
 public class AdminController {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -49,23 +49,23 @@ public class AdminController {
                               @RequestParam(required = true, defaultValue = "" ) String action,
                               Model model) {
         if (action.equals("delete")){
-            userService.deleteUser(userId);
+            userServiceImpl.deleteUser(userId);
         }
         if (action.equals("addAdminRole")){
-            userService.addAdminRole(userId);
+            userServiceImpl.addAdminRole(userId);
         }
         return "redirect:/admin";
     }
 
     @GetMapping("/admin/gt/{userId}")
     public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.usergtList(userId));
+        model.addAttribute("allUsers", userServiceImpl.getUserList(userId));
         return "admin";
     }
 
     @GetMapping("/admin/view_profile")
     public String viewProfile(ModelMap model, @RequestParam(required = true) Long profileId){
-        User user = userService.findUserById(profileId);
+        User user = userServiceImpl.findUserById(profileId);
         Profile profile = profileRepository.getOne(profileId);
         model.addAttribute("user",user);
         model.addAttribute("profile",profile);
