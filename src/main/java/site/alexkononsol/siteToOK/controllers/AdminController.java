@@ -1,6 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -9,33 +8,32 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import site.alexkononsol.siteToOK.entity.*;
-import site.alexkononsol.siteToOK.repositories.*;
-import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
+import site.alexkononsol.siteToOK.service.MessageService;
+import site.alexkononsol.siteToOK.service.ReviewService;
+import site.alexkononsol.siteToOK.service.UserService;
 
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class AdminController {
-    @Autowired
-    private UserServiceImpl userServiceImpl;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ProfileRepository profileRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    MessageRepository messageRepository;
-    @Autowired
-    ReviewRepository reviewRepository;
+
+    private final UserService userService;
+    private final MessageService messageService;
+    private final ReviewService reviewService;
+
+    public AdminController(UserService userService, MessageService messageService, ReviewService reviewService) {
+        this.userService = userService;
+        this.messageService = messageService;
+        this.reviewService = reviewService;
+    }
 
     @GetMapping("/admin")
     public String userList(Model model,@RequestParam(value = "page",defaultValue = "1") int page) {
 
-        long countUsersInDB = userRepository.count();
-        ArrayList<User> users = userRepository.fiveUsers(page);
-        Role admRole = roleRepository.findByName("ROLE_ADMIN");
+        long countUsersInDB = userService.userCount();
+        List<User> users = userService.get5Users(page);
+        Role admRole = new Role(2L, "ROLE_ADMIN");
         long countPagesWithUsers =(countUsersInDB%5 > 0)?(countUsersInDB / 5)+1:countUsersInDB / 5;
         model.addAttribute("users", users);
         model.addAttribute("pageusers",page);
@@ -49,24 +47,24 @@ public class AdminController {
                               @RequestParam(required = true, defaultValue = "" ) String action,
                               Model model) {
         if (action.equals("delete")){
-            userServiceImpl.deleteUser(userId);
+            userService.deleteUser(userId);
         }
         if (action.equals("addAdminRole")){
-            userServiceImpl.addAdminRole(userId);
+            userService.addAdminRole(userId);
         }
         return "redirect:/admin";
     }
 
     @GetMapping("/admin/gt/{userId}")
     public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userServiceImpl.getUserList(userId));
+        model.addAttribute("allUsers", userService.getUserList(userId));
         return "admin";
     }
 
     @GetMapping("/admin/view_profile")
     public String viewProfile(ModelMap model, @RequestParam(required = true) Long profileId){
-        User user = userServiceImpl.findUserById(profileId);
-        Profile profile = profileRepository.getOne(profileId);
+        User user = userService.findUserById(profileId);
+        Profile profile = user.getProfile();
         model.addAttribute("user",user);
         model.addAttribute("profile",profile);
         return "view_profile";
@@ -74,29 +72,29 @@ public class AdminController {
 
     @GetMapping("/admin/appeals")
     public String viewAppealsPage(ModelMap model, Principal principal){
-        ArrayList<Message> usersAppeals = messageRepository.appeals();
+        List<Message> usersAppeals = messageService.getAppeals();
         model.addAttribute("appeals",usersAppeals);
         return "appeals";
     }
 
     @GetMapping("admin/appeals/{id}")
     public String appealPage(ModelMap model,@PathVariable("id") long id){
-        Message appeal = messageRepository.getOne(id);
+        Message appeal = messageService.getById(id);
         model.addAttribute("appeal",appeal);
         return "appeal";
     }
     @PostMapping("/admin/appeals/{id}")
     public String appealsActionsPage(ModelMap model,@PathVariable("id") long id,@RequestParam(defaultValue = "",required = true) String action,
                                      Principal principal){
-        Message message = messageRepository.getOne(id);
+        Message message = messageService.getById(id);
         String actionPath ="/";
         if(action.equals("delete")){
-            messageRepository.delete(message);
+            messageService.delete(message);
              actionPath = "redirect:/admin/appeals";
         }
         if(action.equals("reply")){
             message.setRecipient(principal.getName());
-            messageRepository.save(message);
+            messageService.save(message);
             actionPath = "redirect:/messages/"+message.getSender();
         }
         return actionPath;
@@ -104,12 +102,12 @@ public class AdminController {
 
     @GetMapping("/admin/reviews")
     public String showReviewsPage(ModelMap model,@RequestParam(value = "page",defaultValue = "1") int page){
-        int countReviews = reviewRepository.sizeTableForCheck();
+        int countReviews = reviewService.sizeTableForCheck();
         if(countReviews==0){
             model.addAttribute("isEmpty",true);
         }else{
             model.addAttribute("isEmpty",false);
-            ArrayList<Review> list = reviewRepository.lastReviewsForCheck(page);
+            List<Review> list = reviewService.lastReviewsForCheck(page);
             model.addAttribute("list",list);
             int countPagesWithReviews=(countReviews%5 > 0)?(countReviews/5)+1:countReviews/5;
             model.addAttribute("countPages",countPagesWithReviews);
@@ -120,13 +118,13 @@ public class AdminController {
 
     @PostMapping("/admin/reviews_for_check")
     public String actionWithReviews(@RequestParam(defaultValue = "",required = true) String action,@RequestParam(defaultValue = "",required = true) long reviewId){
-        Review review = reviewRepository.getOne(reviewId);
+        Review review = reviewService.getById(reviewId);
         if(action.equals("delete")){
-            reviewRepository.delete(review);
+            reviewService.delete(review);
         }
         if(action.equals("approve")){
             review.setApproved(true);
-            reviewRepository.save(review);
+            reviewService.save(review);
         }
         return "redirect:/admin/reviews";
     }
