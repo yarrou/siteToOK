@@ -44,4 +44,19 @@ public class MessagesServiceImpl implements MessageService {
     public void save(Message message) {
         repository.save(message);
     }
+
+    @Override
+    public List<Message> getAppeals() {
+        return repository.appeals();
+    }
+
+    @Override
+    public Message getById(Long id) {
+        return repository.getOne(id);
+    }
+
+    @Override
+    public void delete(Message message) {
+        repository.delete(message);
+    }
 }

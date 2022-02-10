@@ -10,4 +10,7 @@ public interface MessageService {
     List<Message> getMessagesList(String user1, String user2);
     List<Message> getLast5Messages(String userName, String nameSender);
     void save(Message message);
+    List<Message> getAppeals();
+    Message getById(Long id);
+    void delete(Message message);
 }
