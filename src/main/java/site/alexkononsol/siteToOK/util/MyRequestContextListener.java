@@ -14,6 +14,6 @@ public class MyRequestContextListener extends RequestContextListener {
     //the method is designed to get the URL of the current request
     public String getMyUrl(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getRequestURL().toString();
+        return request.getRequestURL().toString().replace(request.getServletPath(),"");
     }
 }
