@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder encoder;
     private final EmailSenderService emailSenderService;
     private final String defaultEmail;
     private final String adminName;
@@ -35,15 +35,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserServiceImpl(PasswordResetTokenRepository passwordResetTokenRepository,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder,
-                            EmailSenderService emailSenderService,
-                           @Value("${S_EMAIL}")String defaultEmail,
-                           @Value("${ADMIN_NAME}")String adminName,
-                           @Value("${ADMIN_PASSWORD}")String adminPassword) {
+                           BCryptPasswordEncoder encoder,
+                           EmailSenderService emailSenderService,
+                           @Value("${S_EMAIL}") String defaultEmail,
+                           @Value("${ADMIN_NAME}") String adminName,
+                           @Value("${ADMIN_PASSWORD}") String adminPassword) {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.encoder = encoder;
         this.emailSenderService = emailSenderService;
         this.defaultEmail = defaultEmail;
         this.adminName = adminName;
@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     public void register(User user) {
-        log.debug("регистрация пользователя {}",user.getUsername());
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        log.debug("регистрация пользователя {}", user.getUsername());
+        String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         String randomCode = RandomString.make(64);
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepository.save(user);
-            log.debug("user {} registered successfully",user.getUsername());
+            log.debug("user {} registered successfully", user.getUsername());
             return true;
         }
     }
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
-            log.error("user named {} already exists",user.getUsername());
+            log.error("user named {} already exists", user.getUsername());
             return false;
         }
         Profile profile = new Profile();
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         userRepository.save(user);
-        log.info("user {} saved successfully",user.getUsername());
+        log.info("user {} saved successfully", user.getUsername());
 
         return true;
     }
@@ -114,10 +114,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
-            log.warn("deleted user with id {}",userId);
+            log.warn("deleted user with id {}", userId);
             return true;
         }
-        log.warn("deleting a user with id {} is impossible, absent in the database",userId);
+        log.warn("deleting a user with id {} is impossible, absent in the database", userId);
         return false;
     }
 
@@ -126,22 +126,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .setParameter("paramId", idMin).getResultList();
     }*/
 
-    public User findUserByEmail(String email){
+    public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public void updatePassword(String password, Long userId) {
-        log.debug("update password user with id {}",userId);
-        userRepository.updatePassword(password, userId);
-    }
 
     /* This method is for automatic database configuration. This includes creating and saving the ADMIN and USER
     roles, and an account with administrator privileges. Login and password are set using the {ADMIN_NAME} and
     {ADMIN_PASSWORD} environment variables. */
-    public void adminInit(){
-        if(!userRepository.existsByUsername(adminName)){
-            log.warn("default administrator account not found (username is {} ), database initialization",adminName);
-            Role userRole =new Role();
+    public void adminInit() {
+        if (!userRepository.existsByUsername(adminName)) {
+            log.warn("default administrator account not found (username is {} ), database initialization", adminName);
+            Role userRole = new Role();
             userRole.setId(1L);
             userRole.setName("ROLE_USER");
             roleRepository.save(userRole);
@@ -160,25 +156,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roles.add(new Role(1L, "ROLE_USER"));
             roles.add(new Role(2L, "ROLE_ADMIN"));
             user.setRoles(roles);
-            user.setPassword(bCryptPasswordEncoder.encode(adminPassword));
+            user.setPassword(encoder.encode(adminPassword));
             userRepository.save(user);
         }
     }
-    public void addAdminRole(Long userId){
+
+    public void addAdminRole(Long userId) {
         User user = userRepository.getOne(userId);
         Role role = roleRepository.findByName("ROLE_ADMIN");
         Set<Role> roles = user.getRoles();
         roles.add(role);
         user.setRoles(roles);
         userRepository.save(user);
-        log.warn("the user {} is granted admin privileges",user.getUsername());
+        log.warn("the user {} is granted admin privileges", user.getUsername());
+    }
+
+    @Override
+    public void upgradePassword(String token, String password) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
+        User user = resetToken.getUser();
+        userRepository.updatePassword(encoder.encode(password), user.getId());
+        passwordResetTokenRepository.delete(resetToken);
+        log.debug("update password user {}",user.getUsername() );
     }
 
 
     @Override
     public boolean userPasswordForgot(String email) {
         User user = findUserByEmail(email);
-        if (user == null){
+        if (user == null) {
             return false;
         }
         PasswordResetToken token = new PasswordResetToken();
@@ -186,7 +192,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         token.setUser(user);
         token.setExpiryDate(30);
         passwordResetTokenRepository.save(token);
-        emailSenderService.forgotPasswordEmail(user,token);
+        emailSenderService.forgotPasswordEmail(user, token);
         return true;
     }
 
@@ -196,10 +202,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if (user == null) {
             UsernameNotFoundException e = new UsernameNotFoundException("User not found");
-            log.error("user {} not found",username,e);
+            log.error("user {} not found", username, e);
             throw e;
         }
-        log.debug("user {} found ",username);
+        log.debug("user {} found ", username);
         return user;
     }
 

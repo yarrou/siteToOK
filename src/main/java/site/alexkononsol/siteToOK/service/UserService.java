@@ -20,4 +20,5 @@ public interface UserService {
     List<User> get5Users(int page);
     void addAdminRole(Long userId);
     //List<User> getUserList(Long id);
+    void upgradePassword(String token,String password);
 }
