@@ -2,7 +2,6 @@ package site.alexkononsol.siteToOK.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,39 +13,43 @@ import site.alexkononsol.siteToOK.entity.Profile;
 import site.alexkononsol.siteToOK.entity.Role;
 import site.alexkononsol.siteToOK.entity.User;
 import site.alexkononsol.siteToOK.repositories.PasswordResetTokenRepository;
-import site.alexkononsol.siteToOK.repositories.ProfileRepository;
 import site.alexkononsol.siteToOK.repositories.RoleRepository;
 import site.alexkononsol.siteToOK.repositories.UserRepository;
 import site.alexkononsol.siteToOK.service.EmailSenderService;
 import site.alexkononsol.siteToOK.service.UserService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserDetailsService, UserService {
-    @PersistenceContext
-    private EntityManager em;
-    @Autowired
-    PasswordResetTokenRepository passwordResetTokenRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    ProfileRepository profileRepository;
-    @Autowired
-    private EmailSenderService emailSenderService;
-    @Value("${S_EMAIL}")
-    private String defaultEmail;
-    @Value("${ADMIN_NAME}")
-    private String adminName;
-    @Value("${ADMIN_PASSWORD}")
-    private String adminPassword;
+public class UserServiceImpl implements UserService, UserDetailsService {
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailSenderService emailSenderService;
+    private final String defaultEmail;
+    private final String adminName;
+    private final String adminPassword;
+
+    public UserServiceImpl(PasswordResetTokenRepository passwordResetTokenRepository,
+                           UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                            EmailSenderService emailSenderService,
+                           @Value("${S_EMAIL}")String defaultEmail,
+                           @Value("${ADMIN_NAME}")String adminName,
+                           @Value("${ADMIN_PASSWORD}")String adminPassword) {
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.emailSenderService = emailSenderService;
+        this.defaultEmail = defaultEmail;
+        this.adminName = adminName;
+        this.adminPassword = adminPassword;
+    }
+
 
     public void register(User user) {
         log.debug("регистрация пользователя {}",user.getUsername());
@@ -73,20 +76,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             log.debug("user {} registered successfully",user.getUsername());
             return true;
         }
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            UsernameNotFoundException e = new UsernameNotFoundException("User not found");
-            log.error("user {} not found",username,e);
-            throw e;
-        }
-        log.debug("user {} found ",username);
-        return user;
     }
 
     @Override
@@ -132,10 +121,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return false;
     }
 
-    public List<User> getUserList(Long idMin) {
+    /*public List<User> getUserList(Long idMin) {
         return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
                 .setParameter("paramId", idMin).getResultList();
-    }
+    }*/
 
     public User findUserByEmail(String email){
         return userRepository.findByEmail(email);
@@ -185,11 +174,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         log.warn("the user {} is granted admin privileges",user.getUsername());
     }
 
-    public boolean isAdmin(User user){
-        Role role = roleRepository.findByName("ROLE_ADMIN");
-        Set<Role> roles = user.getRoles();
-        return roles.contains(roles);
-    }
 
     @Override
     public boolean userPasswordForgot(String email) {
@@ -207,7 +191,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User getUserByName(String name) {
-        return null;
+    public User getUserByName(String username) {
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            UsernameNotFoundException e = new UsernameNotFoundException("User not found");
+            log.error("user {} not found",username,e);
+            throw e;
+        }
+        log.debug("user {} found ",username);
+        return user;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return getUserByName(username);
     }
 }

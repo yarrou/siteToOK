@@ -19,5 +19,5 @@ public interface UserService {
     long userCount();
     List<User> get5Users(int page);
     void addAdminRole(Long userId);
-    List<User> getUserList(Long id);
+    //List<User> getUserList(Long id);
 }
