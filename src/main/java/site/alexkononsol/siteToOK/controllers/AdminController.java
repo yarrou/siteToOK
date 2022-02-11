@@ -55,11 +55,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/gt/{userId}")
+    /*@GetMapping("/admin/gt/{userId}")
     public String  gtUser(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("allUsers", userService.getUserList(userId));
         return "admin";
-    }
+    }*/
 
     @GetMapping("/admin/view_profile")
     public String viewProfile(ModelMap model, @RequestParam(required = true) Long profileId){
@@ -117,7 +117,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/reviews_for_check")
-    public String actionWithReviews(@RequestParam(defaultValue = "",required = true) String action,@RequestParam(defaultValue = "",required = true) long reviewId){
+    public String actionWithReviews(@RequestParam(defaultValue = "") String action,@RequestParam(defaultValue = "") long reviewId){
         Review review = reviewService.getById(reviewId);
         if(action.equals("delete")){
             reviewService.delete(review);
