@@ -180,6 +180,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.debug("update password user {}",user.getUsername() );
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return userRepository.existsByUsername(name);
+    }
+
 
     @Override
     public boolean userPasswordForgot(String email) {
