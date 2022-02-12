@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.adminPassword = adminPassword;
     }
 
-
+    @Override
     public void register(User user) {
         log.debug("регистрация пользователя {}", user.getUsername());
         String encodedPassword = encoder.encode(user.getPassword());
@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         emailSenderService.sendVerificationEmail(user);
     }
 
+    @Override
     public boolean verifyRegistration(String verificationCode) {
         User user = userRepository.findByVerificationCode(verificationCode);
 
@@ -88,15 +89,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.fiveUsers(page);
     }
 
+    @Override
     public User findUserById(Long userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
     }
 
-
+    @Override
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             log.error("user named {} already exists", user.getUsername());
             return false;
@@ -107,10 +108,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         userRepository.save(user);
         log.info("user {} saved successfully", user.getUsername());
-
         return true;
     }
 
+    @Override
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
@@ -121,11 +122,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return false;
     }
 
-    /*public List<User> getUserList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
-    }*/
-
+    @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -134,6 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     /* This method is for automatic database configuration. This includes creating and saving the ADMIN and USER
     roles, and an account with administrator privileges. Login and password are set using the {ADMIN_NAME} and
     {ADMIN_PASSWORD} environment variables. */
+    @Override
     public void adminInit() {
         if (!userRepository.existsByUsername(adminName)) {
             log.warn("default administrator account not found (username is {} ), database initialization", adminName);
@@ -161,6 +159,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    @Override
     public void addAdminRole(Long userId) {
         User user = userRepository.getOne(userId);
         Role role = roleRepository.findByName("ROLE_ADMIN");
