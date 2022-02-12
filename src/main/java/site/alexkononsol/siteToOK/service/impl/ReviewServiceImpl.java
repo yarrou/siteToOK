@@ -26,6 +26,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public int countReviews() {
+        return repository.sizeTable();
+    }
+
+    @Override
     public Review getById(Long id) {
         return repository.getOne(id);
     }
@@ -38,5 +43,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void delete(Review review) {
         repository.save(review);
+    }
+
+    @Override
+    public List<Review> lastReviews(int page) {
+        return repository.lastReviews(page);
     }
 }
