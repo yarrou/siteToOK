@@ -2,6 +2,7 @@ package site.alexkononsol.siteToOK.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,32 +24,22 @@ import java.util.*;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder encoder;
-    private final EmailSenderService emailSenderService;
-    private final String defaultEmail;
-    private final String adminName;
-    private final String adminPassword;
-
-    public UserServiceImpl(PasswordResetTokenRepository passwordResetTokenRepository,
-                           UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           BCryptPasswordEncoder encoder,
-                           EmailSenderService emailSenderService,
-                           @Value("${S_EMAIL}") String defaultEmail,
-                           @Value("${ADMIN_NAME}") String adminName,
-                           @Value("${ADMIN_PASSWORD}") String adminPassword) {
-        this.passwordResetTokenRepository = passwordResetTokenRepository;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.emailSenderService = emailSenderService;
-        this.defaultEmail = defaultEmail;
-        this.adminName = adminName;
-        this.adminPassword = adminPassword;
-    }
+    @Autowired
+    private  PasswordResetTokenRepository passwordResetTokenRepository;
+    @Autowired
+    private  UserRepository userRepository;
+    @Autowired
+    private  RoleRepository roleRepository;
+    @Autowired
+    private  BCryptPasswordEncoder encoder;
+    @Autowired
+    private  EmailSenderService emailSenderService;
+    @Value("${S_EMAIL}")
+    private  String defaultEmail;
+    @Value("${ADMIN_NAME}")
+    private  String adminName;
+    @Value("${ADMIN_PASSWORD}")
+    private  String adminPassword;
 
     @Override
     public void register(User user) {
