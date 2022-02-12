@@ -22,4 +22,5 @@ public interface UserService {
     //List<User> getUserList(Long id);
     void upgradePassword(String token,String password);
     boolean existsByName(String name);
+    void adminInit();
 }
