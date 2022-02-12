@@ -15,14 +15,11 @@ import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserServiceImpl userServiceImpl;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -66,10 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
     }
 
-
-
     @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userServiceImpl).passwordEncoder(bCryptPasswordEncoder());
+    protected void configureGlobal(AuthenticationManagerBuilder auth, UserServiceImpl userService) throws Exception {
+        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
     }
 }
