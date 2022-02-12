@@ -1,7 +1,7 @@
 package site.alexkononsol.siteToOK.controllers;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,22 +12,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import site.alexkononsol.siteToOK.entity.Profile;
 import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.repositories.ProfileRepository;
-import site.alexkononsol.siteToOK.repositories.UserRepository;
-import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
+import site.alexkononsol.siteToOK.service.ProfileService;
+import site.alexkononsol.siteToOK.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.security.Principal;
+
+@AllArgsConstructor
 @Slf4j
 @Controller
 public class  UserController {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ProfileRepository profileRepository;
-    @Autowired
-    UserServiceImpl userService;
+    private final ProfileService profileService;
+    private final UserService userService;
 
     @GetMapping("/my_profile")
     public String myProfile(ModelMap model, Principal principal){
@@ -40,7 +37,7 @@ public class  UserController {
 
     @GetMapping("/my_profile_editor")
     public String myProfileEditor(ModelMap model, Principal principal){
-        User user = userRepository.findByUsername(principal.getName());
+        User user = userService.getUserByName(principal.getName());
         Profile profile = user.getProfile();
         model.addAttribute("user",user);
         model.addAttribute("profile",profile);
@@ -49,7 +46,7 @@ public class  UserController {
 
     @PostMapping("/my_profile_editor")
     public ModelAndView editingMyProfile(ModelMap model, @ModelAttribute("profile") Profile profile, @RequestParam("photo") MultipartFile multipartImage){
-        String returnPage = null;
+        String returnPage = "error";
         if(multipartImage!=null) {
             try {
                 profile.setContent(multipartImage.getBytes());
@@ -63,10 +60,9 @@ public class  UserController {
         }
         else {
             log.error("произошла ошибка загрузки файла");
-            returnPage = "error";
             model.addAttribute("clarification","произошла ошибка загрузки файла");
         }
-        profileRepository.save(profile);
+        profileService.save(profile);
         return new ModelAndView(returnPage,model);
     }
     @PostConstruct
