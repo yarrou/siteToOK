@@ -1,9 +1,5 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.repositories.UserRepository;
-import site.alexkononsol.siteToOK.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -12,25 +8,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.service.UserService;
 
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 @Controller
 public class RegistrationController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository repository;
+    private final UserService userService;
+
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
-
         return "registration";
     }
 
@@ -40,8 +35,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, ModelMap model,HttpServletRequest request)
-            throws UnsupportedEncodingException, MessagingException{
+    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, ModelMap model) {
 
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -54,26 +48,16 @@ public class RegistrationController {
             model.addAttribute("usernameError","Недопустимое имя пользователя");
             return "registration";
         }
-        if (repository.existsByUsername(userForm.getUsername())){
+        if (userService.existsByName(userForm.getUsername())){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
-        userService.register(userForm, getSiteURL(request));
+        userService.register(userForm);
         model.addAttribute("usr_email",userForm.getEmail());
-
         return "redirect:/registration_success";
     }
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }
     @GetMapping("/verify")
-    public String verifyUser(@RequestParam (required = true) String code) {
-        if (userService.verify(code)) {
-            return "verify_success";
-        } else {
-            return "verify_fail";
-        }
+    public String verifyUser(@RequestParam  String code) {
+        return userService.verifyRegistration(code)?"verify_success":"verify_fail";
     }
-
 }
