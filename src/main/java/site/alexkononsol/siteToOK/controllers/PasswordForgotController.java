@@ -1,40 +1,23 @@
 package site.alexkononsol.siteToOK.controllers;
 
-import site.alexkononsol.siteToOK.entity.PasswordResetToken;
-import site.alexkononsol.siteToOK.entity.User;
-import site.alexkononsol.siteToOK.form.ForgotPasswordForm;
-import site.alexkononsol.siteToOK.repositories.PasswordResetTokenRepository;
-import site.alexkononsol.siteToOK.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.util.UUID;
+import site.alexkononsol.siteToOK.form.ForgotPasswordForm;
+import site.alexkononsol.siteToOK.service.UserService;
 
 @Controller
 @RequestMapping("/forgot-password")
 public class PasswordForgotController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired private PasswordResetTokenRepository tokenRepository;
-    //@Autowired private EmailService emailService;
 
-    /*@ModelAttribute("forgotPasswordForm")
-    public PasswordForgotDto forgotPasswordDto() {
-        return new PasswordForgotDto();
-    }*/
+    private final UserService userService;
 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
+    public PasswordForgotController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -45,21 +28,11 @@ public class PasswordForgotController {
 
     @PostMapping
     public String processForgotPassword(@ModelAttribute("form")  ForgotPasswordForm form,
-                                        HttpServletRequest request, ModelMap model) throws UnsupportedEncodingException, MessagingException {
-
-        User user = userService.findByEmail(form.getEmail());
-        if (user == null){
+                                         ModelMap model) {
+        if(!userService.userPasswordForgot(form.getEmail())){
             model.addAttribute("emailError","пользователь с таким email не зарегистрирован");
             return "forgot-password";
-        }
-        PasswordResetToken token = new PasswordResetToken();
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        token.setExpiryDate(30);
-        tokenRepository.save(token);
-        userService.forgotPasswordEmail(form,getSiteURL(request),token);
-
-        return "resetPasswordSuccess";
+        }else return "resetPasswordSuccess";
 
     }
 
