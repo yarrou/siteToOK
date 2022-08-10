@@ -11,7 +11,7 @@
 
     <groupId>site.alexkononsol</groupId>
     <artifactId>siteToOK</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
     <name>siteToOK</name>
     <description>web site</description>
 
@@ -130,6 +130,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.dentrassi.crypto</groupId>
+            <artifactId>pem-keystore</artifactId>
+            <version>2.2.1</version> <!-- check for most recent version -->
         </dependency>
     </dependencies>
 
