@@ -39,4 +39,13 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> get5Articles(int page) {
         return repository.lastArticle(page);
     }
+
+    @Override
+    public List<Article> get5Preview(int page) {
+        List<Article> fullArticles = get5Articles(page);
+        for(Article preview:fullArticles){
+            preview.setText(preview.getText().split("<!-- preview -->")[0]);
+        }
+        return fullArticles;
+    }
 }

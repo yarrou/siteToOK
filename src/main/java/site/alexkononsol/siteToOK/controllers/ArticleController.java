@@ -3,10 +3,7 @@ package site.alexkononsol.siteToOK.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import site.alexkononsol.siteToOK.entity.Article;
 import site.alexkononsol.siteToOK.form.ArticleForm;
 import site.alexkononsol.siteToOK.service.ArticleService;
@@ -64,13 +61,18 @@ public class ArticleController {
         }
         else {
             model.addAttribute("isEmpty",false);
-            ArrayList<Article> articles = (ArrayList<Article>) service.get5Articles(page);
+            ArrayList<Article> articles = (ArrayList<Article>) service.get5Preview(page);
             model.addAttribute("articles",articles);
             int countPagesWithArticles=(countArticles%5 > 0)?(countArticles/5)+1:countArticles/5;
             model.addAttribute("countPages",countPagesWithArticles);
             model.addAttribute("thisPage",page);
         }
         return "article";
+    }
+    @GetMapping("article/{id}")
+    public String getArticlePage(ModelMap model, @PathVariable("id") long id){
+        model.addAttribute(service.getById(id));
+        return "full_article";
     }
 
 
