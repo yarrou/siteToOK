@@ -11,4 +11,5 @@ public interface ArticleService {
     void deleteById(long id);
     int articleCount();
     List<Article> get5Articles(int page);
+    List<Article> get5Preview(int page);
 }
