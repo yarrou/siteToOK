@@ -44,7 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/.map", "/*.bundle.*").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
+
                 .and()
+
                 //Настройка для входа в систему
                 .formLogin()
                 .loginPage("/login")
@@ -52,15 +54,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                //Перенарпавление на главную страницу после успешного входа
+                //redirect на главную страницу после успешного входа
                 //.defaultSuccessUrl("/site")
                 .permitAll()
+
                 .and()
+
                 .logout()
                 .permitAll()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+
+                .and()
+                .logout().deleteCookies("JSESSIONID")
+
+                .and()
+                .rememberMe().key("uniqueAndSecret")
+        ;
     }
 
     @Autowired
