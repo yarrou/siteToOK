@@ -11,7 +11,7 @@
 
     <groupId>site.alexkononsol</groupId>
     <artifactId>siteToOK</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
     <name>siteToOK</name>
     <description>web site</description>
 
@@ -135,6 +135,12 @@
             <groupId>de.dentrassi.crypto</groupId>
             <artifactId>pem-keystore</artifactId>
             <version>2.2.1</version> <!-- check for most recent version -->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.251</version>
         </dependency>
     </dependencies>
 
