@@ -13,9 +13,11 @@ import site.alexkononsol.siteToOK.entity.Profile;
 import site.alexkononsol.siteToOK.entity.Role;
 import site.alexkononsol.siteToOK.entity.User;
 import site.alexkononsol.siteToOK.repositories.PasswordResetTokenRepository;
+import site.alexkononsol.siteToOK.repositories.ProfileRepository;
 import site.alexkononsol.siteToOK.repositories.RoleRepository;
 import site.alexkononsol.siteToOK.repositories.UserRepository;
 import site.alexkononsol.siteToOK.service.EmailSenderService;
+import site.alexkononsol.siteToOK.service.ImageS3Service;
 import site.alexkononsol.siteToOK.service.UserService;
 
 import java.util.*;
@@ -25,28 +27,37 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder encoder;
     private final EmailSenderService emailSenderService;
     private final String defaultEmail;
+    private final String defaultUserAvatarLink;
     private final String adminName;
     private final String adminPassword;
+    private final ImageS3Service imageS3Service;
 
     public UserServiceImpl(PasswordResetTokenRepository passwordResetTokenRepository,
                            UserRepository userRepository,
+                           ProfileRepository profileRepository,
                            RoleRepository roleRepository,
                            EmailSenderService emailSenderService,
                            @Value("${S_EMAIL}") String defaultEmail,
+                           @Value("${default.user.avatar.link}") String defaultUserAvatarLink,
                            @Value("${ADMIN_NAME}") String adminName,
-                           @Value("${ADMIN_PASSWORD}") String adminPassword) {
+                           @Value("${ADMIN_PASSWORD}") String adminPassword,
+                           ImageS3Service imageS3Service) {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
         this.roleRepository = roleRepository;
         this.encoder = new BCryptPasswordEncoder();
         this.emailSenderService = emailSenderService;
         this.defaultEmail = defaultEmail;
+        this.defaultUserAvatarLink = defaultUserAvatarLink;
         this.adminName = adminName;
         this.adminPassword = adminPassword;
+        this.imageS3Service = imageS3Service;
     }
 
     @Override
@@ -101,7 +112,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.error("user named {} already exists", user.getUsername());
             return false;
         }
-        Profile profile = new Profile();
+        Profile profile = new Profile(defaultUserAvatarLink);
         user.setProfile(profile);
         profile.setUser(user);
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
@@ -144,7 +155,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             roleRepository.save(adminRole);
             User user = new User();
             user.setUsername(adminName);
-            Profile profile = new Profile();
+            Profile profile = new Profile(defaultUserAvatarLink);
             user.setProfile(profile);
             profile.setUser(user);
             user.setEmail(defaultEmail);
