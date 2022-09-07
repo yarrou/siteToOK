@@ -19,6 +19,7 @@ import site.alexkononsol.siteToOK.repositories.UserRepository;
 import site.alexkononsol.siteToOK.service.EmailSenderService;
 import site.alexkononsol.siteToOK.service.ImageS3Service;
 import site.alexkononsol.siteToOK.service.UserService;
+import site.alexkononsol.siteToOK.util.BASE64DecodedMultipartFile;
 
 import java.util.*;
 
@@ -96,7 +97,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<User> get5Users(int page) {
-        return userRepository.fiveUsers(page);
+        List<User> users = userRepository.fiveUsers(page);
+        users.stream().peek(this::changeProfileAvatar).map(User::getProfile).forEach(profileRepository::save);
+        return users;
     }
 
     @Override
@@ -213,7 +216,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUserByName(String username) {
         User user = userRepository.findByUsername(username);
-
         if (user == null) {
             UsernameNotFoundException e = new UsernameNotFoundException("User not found");
             log.error("user {} not found", username, e);
@@ -227,4 +229,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return getUserByName(username);
     }
+    private void changeProfileAvatar(User user){
+        Profile profile = user.getProfile();
+        if(profile.getContent() != null){
+            profile.setAvatarLink(imageS3Service.saveImageInS3(new BASE64DecodedMultipartFile(profile.getContent(),user.getUsername() + ".png")));
+            profile.setContent(null);
+        }
+    }
+
 }
