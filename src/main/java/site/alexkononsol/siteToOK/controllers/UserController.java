@@ -12,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import site.alexkononsol.siteToOK.entity.Profile;
 import site.alexkononsol.siteToOK.entity.User;
+import site.alexkononsol.siteToOK.service.ImageS3Service;
 import site.alexkononsol.siteToOK.service.ProfileService;
 import site.alexkononsol.siteToOK.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.security.Principal;
 
 @AllArgsConstructor
@@ -25,6 +25,7 @@ import java.security.Principal;
 public class  UserController {
     private final ProfileService profileService;
     private final UserService userService;
+    private final ImageS3Service imageS3Service;
 
     @GetMapping("/my_profile")
     public String myProfile(ModelMap model, Principal principal){
@@ -49,9 +50,9 @@ public class  UserController {
         String returnPage = "error";
         if(multipartImage!=null) {
             try {
-                profile.setContent(multipartImage.getBytes());
+                profile.setAvatarLink(imageS3Service.saveImageInS3(multipartImage));
                 returnPage = "redirect:/my_profile";
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("не удается прочесть файл",e);
                 model.addAttribute("clarification","не удается считать файл");
                 model.addAttribute("errorMsg", e.getMessage());
