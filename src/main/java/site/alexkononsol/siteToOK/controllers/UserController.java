@@ -15,6 +15,7 @@ import site.alexkononsol.siteToOK.entity.User;
 import site.alexkononsol.siteToOK.service.ImageS3Service;
 import site.alexkononsol.siteToOK.service.ProfileService;
 import site.alexkononsol.siteToOK.service.UserService;
+import site.alexkononsol.siteToOK.service.impl.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
 import java.security.Principal;
@@ -69,5 +70,6 @@ public class  UserController {
     @PostConstruct
     public void init() {
         userService.adminInit();
+        ((UserServiceImpl)userService).changeAllProfiles();
     }
 }
