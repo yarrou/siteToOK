@@ -97,9 +97,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<User> get5Users(int page) {
-        List<User> users = userRepository.fiveUsers(page);
-        users.stream().peek(this::changeProfileAvatar).map(User::getProfile).forEach(profileRepository::save);
-        return users;
+        return userRepository.fiveUsers(page);
     }
 
     @Override
@@ -235,6 +233,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             profile.setAvatarLink(imageS3Service.saveImageInS3(new BASE64DecodedMultipartFile(profile.getContent(),user.getUsername() + ".png")));
             profile.setContent(null);
         }
+    }
+    public void changeAllProfiles(){
+        userRepository.findAll().stream().peek(this::changeProfileAvatar).forEach(a -> profileRepository.save(a.getProfile()));
     }
 
 }
