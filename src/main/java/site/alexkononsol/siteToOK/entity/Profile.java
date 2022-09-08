@@ -3,14 +3,14 @@ package site.alexkononsol.siteToOK.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import site.alexkononsol.siteToOK.SiteToOkApplication;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.io.IOException;
 import java.time.LocalDate;
 @Slf4j @Getter @Setter
 @Entity
+@Component
 @Table(name = "profiles")
 public class Profile {
     @Id
@@ -24,25 +24,21 @@ public class Profile {
     private String name;
     private String soName;
     private int weight;
+    private String avatarLink;
     @Column(name = "content", columnDefinition="bytea")
     byte[] content;
 
 
     public Profile() {
-        try {
-            content= SiteToOkApplication.class.getClassLoader().getResourceAsStream("static/images/user-male-circle.png").readAllBytes();
-
-        } catch (IOException e) {
-            log.error("default icon file not found",e);
-        }
+    }
+    public Profile(String defaultLink){
+        setAvatarLink(defaultLink);
     }
 
     public Profile(Long id){
         this.id=id;
     }
-
-
-
+    
 }
 
 
