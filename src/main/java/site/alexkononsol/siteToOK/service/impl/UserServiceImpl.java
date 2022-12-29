@@ -106,6 +106,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userFromDb.orElse(new User());
     }
 
+    @Override public boolean updateUser(User user){
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB == null) {
+            log.error("user named {} no exists", user.getUsername());
+            return false;
+        }else {
+            userRepository.save(user);
+            return true;
+        }
+    }
+
     @Override
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
