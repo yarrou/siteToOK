@@ -23,53 +23,69 @@ import java.security.Principal;
 @AllArgsConstructor
 @Slf4j
 @Controller
-public class  UserController {
+public class UserController {
     private final ProfileService profileService;
     private final UserService userService;
     private final ImageS3Service imageS3Service;
 
     @GetMapping("/my_profile")
-    public String myProfile(ModelMap model, Principal principal){
+    public String myProfile(ModelMap model, Principal principal) {
         User user = userService.getUserByName(principal.getName());
         Profile profile = user.getProfile();
-        model.addAttribute("user",user);
-        model.addAttribute("profile",profile);
+        if(profile.getContent()!=null){
+            profile.setContent(null);
+            profileService.save(profile);
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("profile", profile);
         return "my_profile";
     }
 
     @GetMapping("/my_profile_editor")
-    public String myProfileEditor(ModelMap model, Principal principal){
+    public String myProfileEditor(ModelMap model, Principal principal) {
         User user = userService.getUserByName(principal.getName());
         Profile profile = user.getProfile();
-        model.addAttribute("user",user);
-        model.addAttribute("profile",profile);
+        model.addAttribute("user", user);
+        model.addAttribute("profile", profile);
         return "my_profile_editor";
     }
 
     @PostMapping("/my_profile_editor")
-    public ModelAndView editingMyProfile(ModelMap model, @ModelAttribute("profile") Profile profile, @RequestParam("photo") MultipartFile multipartImage){
+    public ModelAndView editingMyProfile(ModelMap model, @ModelAttribute("profile") Profile profile, @RequestParam("photo") MultipartFile multipartImage) {
         String returnPage = "error";
-        if(multipartImage!=null) {
+        if (multipartImage != null) {
             try {
+                if(profile.getAvatarLink()!=null){
+                    String lastSegment = profile.getAvatarLink().replaceAll(".*/", "");
+                    imageS3Service.deleteImageInS3(lastSegment);
+                }
                 profile.setAvatarLink(imageS3Service.saveImageInS3(multipartImage));
+                profileService.save(profile);
                 returnPage = "redirect:/my_profile";
-            } catch (Exception e) {
-                log.error("не удается прочесть файл",e);
-                model.addAttribute("clarification","не удается считать файл");
+            } catch (NullPointerException e) {
+                log.error("не удается удалить предыдущий  файл", e);
+                model.addAttribute("clarification", "не удается удалить предыдущий аватар");
                 model.addAttribute("errorMsg", e.getMessage());
                 returnPage = "error";
             }
-        }
-        else {
+            catch (Exception e) {
+                log.error("не удается прочесть файл", e);
+                model.addAttribute("clarification", "не удается считать файл");
+                model.addAttribute("errorMsg", e.getMessage());
+                returnPage = "error";
+            }
+        } else {
             log.error("произошла ошибка загрузки файла");
-            model.addAttribute("clarification","произошла ошибка загрузки файла");
+            model.addAttribute("clarification", "произошла ошибка загрузки файла");
         }
-        profileService.save(profile);
-        return new ModelAndView(returnPage,model);
+        userService.updateUser(profile.getUser());
+        return new ModelAndView(returnPage, model);
     }
+
     @PostConstruct
     public void init() {
         userService.adminInit();
-        ((UserServiceImpl)userService).changeAllProfiles();
+        ((UserServiceImpl) userService).changeAllProfiles();
+        ((UserServiceImpl) userService).deleteUnusedContents();
     }
 }
