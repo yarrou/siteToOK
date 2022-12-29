@@ -238,15 +238,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return getUserByName(username);
     }
-    private void changeProfileAvatar(User user){
-        Profile profile = user.getProfile();
-        if(profile.getContent() != null){
-            profile.setAvatarLink(imageS3Service.saveImageInS3(new BASE64DecodedMultipartFile(profile.getContent(),user.getUsername() + ".png")));
-            profile.setContent(null);
-        }
+    public void deleteUnusedContents(){
+        profileRepository.findAll().stream()
+                .peek(a -> a.setContent(null))
+                .forEach(profileRepository::saveAndFlush);
     }
     public void changeAllProfiles(){
-        userRepository.findAll().stream().peek(this::changeProfileAvatar).forEach(a -> profileRepository.save(a.getProfile()));
+        profileRepository.findAll().stream().filter(a ->a.getContent()!=null&&a.getAvatarLink()==null)
+                .peek(a -> a.setAvatarLink(imageS3Service.saveImageInS3(new BASE64DecodedMultipartFile(a.getContent(),a.getUser().getUsername() + ".png"))))
+                .peek(a -> a.setContent(null))
+                .forEach(profileRepository::saveAndFlush);
     }
 
 }
