@@ -39,4 +39,10 @@ public class ImageS3ServiceImpl implements ImageS3Service {
         }
         return s3Client.getUrl(doSpaceBucket, filepath).toString();
     }
+
+    @Override
+     public void deleteImageInS3(String name) {
+        System.out.println("deleted photo " + name);
+        s3Client.deleteObject(doSpaceBucket,pathFolder + name);
+    }
 }
