@@ -23,4 +23,5 @@ public interface UserService {
     void upgradePassword(String token,String password);
     boolean existsByName(String name);
     void adminInit();
+    boolean updateUser(User user);
 }

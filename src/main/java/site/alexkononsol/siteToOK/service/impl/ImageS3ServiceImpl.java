@@ -18,6 +18,9 @@ public class ImageS3ServiceImpl implements ImageS3Service {
     @Autowired
     AmazonS3 s3Client;
 
+    @Value("${do.home.folder}")
+    private String pathFolder = "siteOK/dev/";
+
     @Value("${do.space.bucket}")
     private String doSpaceBucket;
 
@@ -26,7 +29,7 @@ public class ImageS3ServiceImpl implements ImageS3Service {
         ObjectMetadata data = new ObjectMetadata();
         data.setContentType(file.getContentType());
         data.setContentLength(file.getSize());
-        String filepath = "siteOK/" + UUID.randomUUID() + ".jpg";
+        String filepath = pathFolder + UUID.randomUUID() + ".jpg";
         try {
             PutObjectRequest putObjectRequest = new PutObjectRequest(doSpaceBucket,
                     filepath, file.getInputStream(), data).withCannedAcl(CannedAccessControlList.PublicRead);
@@ -35,5 +38,11 @@ public class ImageS3ServiceImpl implements ImageS3Service {
             throw new RuntimeException(e);
         }
         return s3Client.getUrl(doSpaceBucket, filepath).toString();
+    }
+
+    @Override
+     public void deleteImageInS3(String name) {
+        System.out.println("deleted photo " + name);
+        s3Client.deleteObject(doSpaceBucket,pathFolder + name);
     }
 }
