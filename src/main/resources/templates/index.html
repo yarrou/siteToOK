@@ -6,9 +6,9 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 	<head>
-		<title>Фитнесс для всех с Ольгой Кононович</title>
+		<title th:text="#{page.head.title}">Фитнесс для всех с Ольгой Кононович</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -31,17 +31,17 @@
 				<div class="inner">
 					<nav>
 						<ul>
-							<li><a href="#intro">Приветствие</a></li>
-							<li><a href="#one">О вашем тренере</a></li>
-							<li><a href="#two">Статьи</a></li>
-							<li><a href="#three">Типы телосложений</a></li>
-							<li><a href="#four">Питание</a></li>
-							<li><a href="#five">Спортивные добавки</a></li>
-							<li><a href="#six">Тренировки</a></li>
-							<li><a href="#seven">Цель занятий</a></li>
-							<li><a href="#seven1">До - После</a> </li>
-							<li><a href="#eight">Отзывы</a></li>
-							<li><a href="#nine">Связаться со мной</a></li>
+							<li><a href="#intro"><span th:text="#{page.main.sidebar.intro}">Приветствие</span></a></li>
+							<li><a href="#one"><span th:text="#{page.main.sidebar.about_your_coach}">О вашем тренере</span></a></li>
+							<li><a href="#two"><span th:text="#{page.main.sidebar.articles}">Статьи</span></a></li>
+							<li><a href="#three"><span th:text="#{page.main.sidebar.body_types}">Типы телосложений</span></a></li>
+							<li><a href="#four"><span th:text="#{page.main.sidebar.nutrition}">Питание</span></a></li>
+							<li><a href="#five"><span th:text="#{page.main.sidebar.sports_supplements}">Спортивные добавки</span></a></li>
+							<li><a href="#six"><span th:text="#{page.main.sidebar.training}">Тренировки</span></a></li>
+							<li><a href="#seven"><span th:text="#{page.main.sidebar.purpose_of_training}">Цель занятий</span></a></li>
+							<li><a href="#seven1"><span th:text="#{page.main.sidebar.before_after}">До - После</span></a> </li>
+							<li><a href="#eight"><span th:text="#{page.main.sidebar.reviews}">Отзывы</span></a></li>
+							<li><a href="#nine"><span th:text="#{page.main.sidebar.contact_me}">Связаться со мной</span></a></li>
 						</ul>
 					</nav>
 				</div>
@@ -53,19 +53,19 @@
 					<nav>
 						<ul>
 							<li sec:authorize="hasRole('ADMIN')">
-								<a th:href="@{/admin}">Администрирование</a>
+								<a th:href="@{/admin}"><span th:text="#{page.sidebar.administration}">Администрирование</span></a>
 							</li>
 
 							<li sec:authorize="!isAuthenticated()">
-								<a th:href="@{/login}">Войти</a>
+								<a th:href="@{/login}"><span th:text="#{page.sidebar.login}">Войти</span></a>
 							</li>
 
 							<li sec:authorize="!isAuthenticated()">
-								<a th:href="@{/registration}">Зарегистрироваться</a>
+								<a th:href="@{/registration}"><span th:text="#{page.sidebar.registration}">Зарегистрироваться</span></a>
 							</li>
 
 							<li sec:authorize ="isAuthenticated()">
-								<a th:href="@{/logout}">Выйти</a>
+								<a th:href="@{/logout}"><span th:text="#{page.sidebar.logout}">Выйти</span></a>
 							</li>
 
 							<li sec:authorize ="isAuthenticated()">
@@ -85,10 +85,10 @@
 
 
 						<div class="inner">
-							<h1>Фитнесс для всех. </h1>
-							<p>Я , Ольга Кононович, поделюсь с вами секретами как добиться пластических изменений фигуры, грамотно составить план тренировок и питания.</p>
+							<h1><span th:text="#{page.head.title}">Фитнесс для всех.</span> </h1>
+							<p><span th:text="#{page.main.intro}">Я , Ольга Кононович, поделюсь с вами секретами как добиться пластических изменений фигуры, грамотно составить план тренировок и питания.</span></p>
 							<ul class="actions">
-								<li><a href="#one" class="button scrolly">Читать далее</a></li>
+								<li><a href="#one" class="button scrolly"><span th:text="#{page.button.read_more}">Читать далее</span></a></li>
 							</ul>
 						</div>
 					</section>
@@ -99,10 +99,13 @@
 							<a href="#" class="image"><img src="images/velcome_olga.jpg" alt="" data-position="center center" /></a>
 							<div class="content">
 								<div class="inner">
-									<h2>Я - Ольга Кононович, тренер и выступающий спортсмен.</h2>
-									<p>Обучалась в школе фитнесса "Press 227",  выступала в нескольких чемпионатах РБ и РФ в номинации "Фитнес-бикини".</p>
+									<span th:utext="#{page.main.about_your_coach}">
+										<h2>Я - Ольга Кононович, тренер и выступающий спортсмен.</h2>
+										<p>Обучалась в школе фитнесса "Press 227",  выступала в нескольких чемпионатах РБ и РФ в номинации "Фитнес-бикини".</p>
+									</span>
+
 									<ul class="actions">
-										<li><a th:href="@{/olga_kononovich_more}" class="button">Читать подробнее</a></li>
+										<li><a th:href="@{/olga_kononovich_more}" class="button"><span th:text="#{page.button.read_more1}">Читать подробнее</span></a></li>
 									</ul>
 								</div>
 							</div>
@@ -115,10 +118,18 @@
 						<a href="#" class="image"><img src="images/statii.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Статьи.</h2>
-								<p>Статьи на тему спорта, питания и здорового образа жизни.</p>
+								<span th:utext="#{page.main.articles}">
+									<h2>Статьи.</h2>
+									<p>Статьи на тему спорта, питания и здорового образа жизни.</p>
+								</span>
+
 								<ul class="actions">
-									<li><a th:href="@{/article}" class="button">Читать</a></li>
+									<li><a th:href="@{/article}" class="button">
+										<span th:text="#{page.button.read}">
+										Читать
+										</span>
+									</a>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -132,10 +143,12 @@
 						<a href="#" class="image"><img src="images/tipy_tela.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Типы телосложений.</h2>
-								<p>Тип телосложения напрямую влияет на режим и содержание как тренировок, так и питания.</p>
+								<span th:utext="#{page.main.body_types}">
+									<h2>Типы телосложений.</h2>
+									<p>Тип телосложения напрямую влияет на режим и содержание как тренировок, так и питания.</p>
+								</span>
 								<ul class="actions">
-									<li><a th:href="@{/tipy_tela}" class="button">Читать подробнее</a></li>
+									<li><a th:href="@{/tipy_tela}" class="button"><span th:text="#{page.button.read_more}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -148,10 +161,13 @@
 						<a href="#" class="image"><img src="images/pitanie.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Питание</h2>
-								<p>То как мы выглядим на 80% зависит от того, как мы питаемся.</p>
+								<span th:utext="#{page.main.nutrition}">
+									<h2>Питание</h2>
+									<p>То как мы выглядим на 80% зависит от того, как мы питаемся.</p>
+								</span>
+
 								<ul class="actions">
-									<li><a th:href="@{/nutrition}" class="button">Читать подробнее</a></li>
+									<li><a th:href="@{/nutrition}" class="button"><span th:text="#{page.button.read_more1}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -165,10 +181,12 @@
 						<a href="#" class="image"><img src="images/dobavki.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Спортивные добавки.</h2>
-								<p>Специальные добавки к вашему рациону способны намного увеличить вашу продуктивность.</p>
+								<span th:utext="#{page.main.sports_supplements}">
+									<h2>Спортивные добавки.</h2>
+									<p>Специальные добавки к вашему рациону способны намного увеличить вашу продуктивность.</p>
+								</span>
 								<ul class="actions">
-									<li><a th:href="@{/sports_supplements}" class="button">Читать подробнее</a></li>
+									<li><a th:href="@{/sports_supplements}" class="button"><span th:text="#{page.button.read}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -181,10 +199,12 @@
 						<a href="#" class="image"><img src="images/trenirovki.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Тренировки.</h2>
-								<p>Основа фитнесса. Выберите себе упражнения для тренировок в спортзале, улице или дома.</p>
+								<span th:utext="#{page.main.training}">
+									<h2>Тренировки.</h2>
+									<p>Основа фитнесса. Выберите себе упражнения для тренировок в спортзале, улице или дома.</p>
+								</span>
 								<ul class="actions">
-									<li><a th:href="@{/training}" class="button">Читать подробнее</a></li>
+									<li><a th:href="@{/training}" class="button"><span th:text="#{page.button.read_more}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -197,10 +217,12 @@
 						<a href="#" class="image"><img src="images/tipy_zan.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Ваши цели.</h2>
-								<p>Рельеф, набор мышечной массы, сбросить лишний вес - для каждой цели свой путь реализации.</p>
+								<span th:utext="#{page.main.purpose_of_training}">
+									<h2>Ваши цели.</h2>
+									<p>Рельеф, набор мышечной массы, сбросить лишний вес - для каждой цели свой путь реализации.</p>
+								</span>
 								<ul class="actions">
-									<li><a th:href="@{/generic}" class="button">Читать подробнее</a></li>
+									<li><a th:href="@{/generic}" class="button"><span th:text="#{page.button.read_more1}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -212,10 +234,12 @@
 						<a href="#" class="image"><img src="images/result.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
+								<span th:utext="#{page.main.before_after}">
 								<h2>До - После </h2>
 								<p>Чего можно достичь с помощью тренировок и питания.</p>
-								<ul class="actions">
-									<li><a th:href="@{/results}" class="button">Читать подробнее</a></li>
+								</span>
+									<ul class="actions">
+										<li><a th:href="@{/results}" class="button"><span th:text="#{page.button.read}">Читать подробнее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -228,10 +252,12 @@
 						<a href="#" class="image"><img src="images/review.jpg" alt="" data-position="center center" /></a>
 						<div class="content">
 							<div class="inner">
-								<h2>Отзывы.</h2>
-								<p>Прочесть или оставить отзыв.</p>
+								<span th:utext="#{page.main.reviews}">
+									<h2>Отзывы.</h2>
+									<p>Прочесть или оставить отзыв.</p>
+								</span>
 								<ul class="actions">
-									<li><a th:href="@{/reviews}" class="button">Далее</a></li>
+									<li><a th:href="@{/reviews}" class="button"><span th:text="#{page.button.resume}">Далее</span></a></li>
 								</ul>
 							</div>
 						</div>
@@ -240,16 +266,16 @@
 
 					<section id="nine" class="wrapper style1 fade-up">
 						<div class="inner">
-							<h2>Связаться со мной.</h2>
+							<h2><span th:text="#{page.main.contact_me}">Связаться со мной.</span></h2>
 							<div class="split style1">
 								<section sec:authorize ="isAuthenticated()">
 									<form th:action="@{/}"
 										  th:object="${message}" method="POST">
 
-										<p>Cooбщение: </p>
+										<p th:text="#{page.form.message}">Cooбщение: </p>
 										<textarea  rows="5" th:field="*{text}"></textarea>
 										<br>
-										<input   type="submit" value="Отправить" />
+										<input   type="submit" th:value="#{page.form.to_send}" />
 										<br>
 									</form>
 								</section>
@@ -277,9 +303,12 @@
 								<section>
 									<ul class="contact">
 										<li>
-											<h3>Адрес</h3>
-											<span>Köln<br />
-											Germany</span>
+											<span th:utext="#{page.main.address}">
+												<h3>Адрес</h3>
+												<span>Köln<br />
+												Germany</span>
+											</span>
+
 										</li>
 										<li>
 											<h3>Email</h3>
@@ -287,7 +316,7 @@
 											<h3>Olgakononovich92@gmail.com</h3>
 										</li>
 										<li>
-											<h3>Социальные сети</h3>
+											<h3><span th:text="#{page.main.social_network}">Социальные сети</span></h3>
 											<ul class="icons">
 												<!--<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>-->
 												<li><a href="https://www.facebook.com/profile.php?id=100030893354597" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
@@ -310,7 +339,7 @@
 				<div class="inner">
 					<ul class="menu">
 				 		<li>Fitnesstoall.by</li>
-            			<li>Ольга Кононович</li>
+            			<li><span th:text="#{page.name}">Ольга Кононович</span></li>
             			<!-- &copy; Untitled. All rights reserved.Design: "http://html5up.net" HTML5 UP
              			developer Aliaksandr Kananovich alex.konon.sol@gmail.com -->
 					</ul>
