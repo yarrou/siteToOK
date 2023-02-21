@@ -6,7 +6,7 @@
 -->
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Фитнесс для всех</title>
+    <title th:text="#{page.head.title}">Фитнесс для всех с Ольгой Кононович</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="assets/css/main.css"/>
@@ -32,10 +32,10 @@
 
 <!-- Header -->
 <header id="header">
-    <a th:href="@{/}" class="title">Фитнесс для всех</a>
+    <a th:href="@{/}" class="title"><span th:text="#{page.header.title}">Фитнесс для всех</span></a>
     <nav>
         <ul>
-            <li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/}"><span th:text="#{page.header.main}">Главная</span></a></li>
         </ul>
     </nav>
 </header>
@@ -51,7 +51,7 @@
             </div>
             <form method="POST" name="formLogin" action="/login_security_check"
                   onsubmit="return loginCheck();">
-                <h2>Вход в систему</h2>
+                <h2 th:text="#{page.login.login}">Вход в систему</h2>
                 <div class="row gtr-uniform">
                     <div>
                         <input name="username" type="text" placeholder="Username"
@@ -59,7 +59,9 @@
                         <br/>
                         <input name="password" type="password" placeholder="Password" maxlength="25"/>
                         <div th:if="${param.error}" class="alert alert-error">
-                            Неправильное имя пользователя или пароль.
+                            <span th:text="#{page.login.login_error}">
+                                Неправильное имя пользователя или пароль.
+                            </span>
                         </div>
                         <br/>
                         <div class="col-6 col-12-small">
@@ -67,13 +69,16 @@
                             <label for="demo-copy">Remember me</label>
                         </div>
                         <br/>
-                        <button type="submit">Войти</button>
-                        <span class="image right"><a class="button"
-                                                     th:href="@{registration}">Зарегистрироваться</a></span>
+                        <button type="submit">
+                            <span th:text="#{page.login.enter}">Войти</span>
+                        </button>
+                        <span class="image right">
+                            <a class="button" th:href="@{registration}"><span th:text="#{page.login.registration}">Зарегистрироваться</span></a>
+                        </span>
                     </div>
                 </div>
             </form>
-            <a class="button" th:href="@{forgot-password}">Забыли пароль?</a>
+            <a class="button" th:href="@{forgot-password}"><span th:text="#{page.login.forgot_password}">Забыли пароль?</span></a>
         </div>
     </section>
 
@@ -85,7 +90,7 @@
     <div class="inner">
         <ul class="menu">
             <li>Fitnesstoall.by</li>
-            <li>Ольга Кононович</li>
+            <li><span th:text="#{page.name}">Ольга Кононович</span></li>
             <!-- &copy; Untitled. All rights reserved.Design: "http://html5up.net" HTML5 UP
              developer Aliaksandr Kananovich alex.konon.sol@gmail.com -->
         </ul>
