@@ -6,7 +6,7 @@
 -->
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Фитнесс для всех</title>
+    <title th:text="#{page.head.title}">Фитнесс для всех с Ольгой Кононович</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
@@ -26,25 +26,25 @@
 
 <!-- Header -->
 <header id="header">
-    <a th:href="@{/}" class="title">Фитнесс для всех</a>
+    <a th:href="@{/}" class="title"><span th:text="#{page.header.title}">Фитнесс для всех</span></a>
     <nav>
         <ul>
-            <li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/}"><span th:text="#{page.header.main}">Главная</span></a></li>
 
             <li sec:authorize="hasRole('ADMIN')">
-                <a th:href="@{/admin}">Администрирование</a>
+                <a th:href="@{/admin}"><span th:text="#{page.sidebar.administration}">Администрирование</span></a>
             </li>
 
             <li sec:authorize="!isAuthenticated()">
-                <a th:href="@{/login}">Войти</a>
+                <a th:href="@{/login}"><span th:text="#{page.sidebar.login}">Войти</span></a>
             </li>
 
             <li sec:authorize="!isAuthenticated()">
-                <a th:href="@{/registration}">Зарегистрироваться</a>
+                <a th:href="@{/registration}"><span th:text="#{page.sidebar.registration}">Зарегистрироваться</span></a>
             </li>
 
             <li sec:authorize ="isAuthenticated()">
-                <a th:href="@{/logout}">Выйти</a>
+                <a th:href="@{/logout}"><span th:text="#{page.sidebar.logout}">Выйти</span></a>
             </li>
 
             <li sec:authorize ="isAuthenticated()">
@@ -64,7 +64,7 @@
     <!-- Main -->
     <section id="main" class="wrapper">
         <div class="inner">
-            <h1 class="major">Ошибка</span></h1>
+            <h1 class="major"><span th:text="#{page.error}">Ошибка</span></h1>
             <p><span th:text="${clarification}"></span></p>
             <p><span th:text="${errorMsg}"></span></p>
         </div>
@@ -78,7 +78,7 @@
     <div class="inner">
         <ul class="menu">
             <li>Fitnesstoall.by</li>
-            <li>Ольга Кононович</li>
+            <li><span th:text="#{page.name}">Ольга Кононович</span></li>
             <!-- &copy; Untitled. All rights reserved.Design: "http://html5up.net" HTML5 UP
              developer Aliaksandr Kananovich alex.konon.sol@gmail.com -->
         </ul>
